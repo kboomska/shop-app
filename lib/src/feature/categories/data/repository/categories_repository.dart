@@ -1,4 +1,4 @@
-import 'package:shop_app_bloc/src/feature/categories/data/api/categories_client.dart';
+import 'package:shop_app_bloc/src/feature/categories/data/api/categories_network_data_provider.dart';
 import 'package:shop_app_bloc/src/feature/categories/model/categories_response.dart';
 
 abstract interface class ICategoriesRepository {
@@ -6,14 +6,14 @@ abstract interface class ICategoriesRepository {
 }
 
 class CategoriesRepositoryImpl implements ICategoriesRepository {
-  final ICategoriesClient _client;
+  final ICategoriesNetworkDataProvider _networkDataProvider;
 
   const CategoriesRepositoryImpl({
-    required ICategoriesClient client,
-  }) : _client = client;
+    required ICategoriesNetworkDataProvider networkDataProvider,
+  }) : _networkDataProvider = networkDataProvider;
 
   @override
   Future<CategoriesResponse> getCategories() async {
-    return _client.getCategories();
+    return _networkDataProvider.getCategories();
   }
 }

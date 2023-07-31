@@ -2,14 +2,15 @@ import 'package:shop_app_bloc/src/feature/categories/model/categories_response.d
 import 'package:shop_app_bloc/src/common/constant/configuration.dart';
 import 'package:shop_app_bloc/src/common/network/network_client.dart';
 
-abstract interface class ICategoriesClient {
+abstract interface class ICategoriesNetworkDataProvider {
   Future<CategoriesResponse> getCategories();
 }
 
-class CategoriesClientImpl implements ICategoriesClient {
+class CategoriesNetworkDataProviderImpl
+    implements ICategoriesNetworkDataProvider {
   final INetworkClient _networkClient;
 
-  const CategoriesClientImpl({
+  const CategoriesNetworkDataProviderImpl({
     required INetworkClient networkClient,
   }) : _networkClient = networkClient;
 
