@@ -13,6 +13,11 @@ sealed class CategoriesState extends _$CategoriesStateBase {
   const factory CategoriesState.processing({
     required List<Category> categories,
   }) = CategoriesState$Processing;
+
+  static const CategoriesState initialState = CategoriesState.idle(
+    categories: <Category>[],
+    error: null,
+  );
 }
 
 final class CategoriesState$Idle extends CategoriesState {
