@@ -11,9 +11,9 @@ abstract base class _$CategoriesEventBase {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is _$CategoriesEventBase;
+    return other is _$CategoriesEventBase && other.runtimeType == runtimeType;
   }
 
   @override
-  int get hashCode => super.hashCode;
+  int get hashCode => 0;
 }
