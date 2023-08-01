@@ -57,6 +57,7 @@ class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
       }
     } catch (_) {
       error = 'Неизвестная ошибка, повторите попытку';
+      rethrow;
     } finally {
       emit(CategoriesState.idle(
         categories: categories ?? state.categories,
