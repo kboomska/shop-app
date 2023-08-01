@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart' as foundation;
+import 'package:meta/meta.dart';
 
 import 'package:shop_app_bloc/src/feature/categories/model/category.dart';
 
@@ -34,6 +35,7 @@ final class CategoriesState$Processing extends CategoriesState {
   String? get error => null;
 }
 
+@immutable
 abstract base class _$CategoriesStateBase {
   final List<Category> categories;
   abstract final String? error;
@@ -41,6 +43,8 @@ abstract base class _$CategoriesStateBase {
   const _$CategoriesStateBase({
     required this.categories,
   });
+
+  bool get hasError => error != null;
 
   @override
   bool operator ==(Object other) {
