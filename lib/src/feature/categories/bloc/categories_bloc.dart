@@ -27,6 +27,8 @@ class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
       },
       transformer: sequential(),
     );
+
+    add(CategoriesEvent$Load());
   }
 
   Future<void> _onCategoriesEvent$Load(
