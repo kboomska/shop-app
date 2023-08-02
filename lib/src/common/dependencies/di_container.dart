@@ -82,7 +82,7 @@ final class ScreenFactoryImpl implements IScreenFactory {
   @override
   Widget makeCategoriesScreen() {
     return BlocProvider(
-      create: (context) => diContainer._makeCategoriesBloc(),
+      create: (_) => diContainer._makeCategoriesBloc(),
       child: const CategoriesScreen(),
     );
   }

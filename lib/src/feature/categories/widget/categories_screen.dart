@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:shop_app_bloc/src/feature/categories/bloc/categories_state.dart';
 import 'package:shop_app_bloc/src/feature/categories/bloc/categories_bloc.dart';
 import 'package:shop_app_bloc/src/common/resources/resources.dart';
 import 'package:shop_app_bloc/src/common/theme/app_colors.dart';
@@ -32,7 +33,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
         elevation: 0,
       ),
       backgroundColor: AppColors.appBackground,
-      body: const _CategoryListWidget(),
+      body: const _CategoriesScreenBody(),
     );
   }
 }
@@ -110,6 +111,38 @@ class _CategoriesScreenProfile extends StatelessWidget {
         foregroundImage: AssetImage(AppImages.profileAvatar),
       ),
     );
+  }
+}
+
+class _CategoriesScreenBody extends StatelessWidget {
+  const _CategoriesScreenBody();
+
+  @override
+  Widget build(BuildContext context) {
+    final bloc = context.watch<CategoriesBloc>();
+
+    if (bloc.state is CategoriesState$Processing) {
+      return const Center(
+        child: CircularProgressIndicator(
+          color: AppColors.buttonBackground,
+        ),
+      );
+    }
+
+    final message = bloc.state.error;
+    if (message != null) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text(
+            message,
+            textAlign: TextAlign.center,
+          ),
+        ),
+      );
+    }
+
+    return const _CategoryListWidget();
   }
 }
 
