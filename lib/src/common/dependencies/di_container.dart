@@ -35,7 +35,7 @@ final class _DIContainer {
   _DIContainer();
 
   /// Create [_ScreenFactoryImpl]
-  IScreenFactory _makeScreenFactory() => _ScreenFactoryImpl(this);
+  IScreenFactory _makeScreenFactory() => _ScreenFactoryImpl(diContainer: this);
 
   /// Create [AppNavigationImpl]
   IAppNavigation _makeAppNavigation() => AppNavigationImpl(
@@ -66,32 +66,24 @@ final class _DIContainer {
         categoriesRepository: _makeCategoriesRepository(),
       );
 
-  // /// Create [LocalizationStorageImpl]
-  // ILocalizationStorage _makeLocalizationStorage() => LocalizationStorageImpl();
-
-  // /// Create [DateCubit]
-  // DateCubit _makeDateCubit() => DateCubit(
-  //       localizationStorage: localizationStorage,
-  //     );
+  /// Create [DateCubit]
+  DateCubit _makeDateCubit() => DateCubit(
+        localizationStorage: _localizationStorage,
+      );
 }
 
 final class _ScreenFactoryImpl implements IScreenFactory {
   final _DIContainer _diContainer;
   DateCubit? _dateCubit;
 
-  _ScreenFactoryImpl(this._diContainer);
+  _ScreenFactoryImpl({required _DIContainer diContainer})
+      : _diContainer = diContainer;
 
   DateCubit _makeDateCubit() {
-    final dateCubit = _dateCubit ??
-        DateCubit(localizationStorage: _diContainer._localizationStorage);
+    final dateCubit = _dateCubit ?? _diContainer._makeDateCubit();
     _dateCubit = dateCubit;
     return dateCubit;
   }
-
-  // @override
-  // Widget makeHomeScreen() {
-  //   return HomeScreen(screenFactory: this);
-  // }
 
   @override
   Widget makeHomeScreen() {
@@ -105,14 +97,6 @@ final class _ScreenFactoryImpl implements IScreenFactory {
   // Widget makeMainScreenGenerateRoute() {
   //   return Navigator(
   //     onGenerateRoute: diContainer._makeShopAppNavigation().onGenerateRoute,
-  //   );
-  // }
-
-  // @override
-  // Widget makeCategoriesScreen() {
-  //   return BlocProvider(
-  //     create: (_) => diContainer._makeCategoriesBloc(),
-  //     child: const CategoriesScreen(),
   //   );
   // }
 
