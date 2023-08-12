@@ -8,8 +8,8 @@ abstract interface class IScreenFactory {
   // Widget makeMainScreenGenerateRoute();
   // Widget makeProductScreen(Dish dish);
   // Widget makeShoppingCartScreen();
-  // Widget makeHomeScreen();
   Widget makeCategoriesScreen();
+  Widget makeHomeScreen();
 }
 
 class AppNavigationImpl implements IAppNavigation {
@@ -19,9 +19,7 @@ class AppNavigationImpl implements IAppNavigation {
 
   @override
   Map<String, Widget Function(BuildContext)> get routes => {
-        // AppNavigationRouteNames.home: (_) => screenFactory.makeHomeScreen(),
-        AppNavigationRouteNames.home: (_) =>
-            screenFactory.makeCategoriesScreen(),
+        AppNavigationRouteNames.home: (_) => screenFactory.makeHomeScreen(),
       };
   @override
   Route<Object> onGenerateRoute(RouteSettings settings) {

@@ -6,6 +6,7 @@ import 'package:shop_app_bloc/src/feature/categories/data/api/categories_network
 import 'package:shop_app_bloc/src/feature/categories/data/repository/categories_repository.dart';
 import 'package:shop_app_bloc/src/feature/categories/widget/categories_screen.dart';
 import 'package:shop_app_bloc/src/feature/categories/bloc/categories_bloc.dart';
+import 'package:shop_app_bloc/src/feature/home/widget/home_screen.dart';
 import 'package:shop_app_bloc/src/common/network/network_client.dart';
 import 'package:shop_app_bloc/src/common/router/app_navigation.dart';
 import 'package:shop_app_bloc/src/common/network/http_client.dart';
@@ -67,10 +68,10 @@ final class ScreenFactoryImpl implements IScreenFactory {
 
   const ScreenFactoryImpl(this.diContainer);
 
-  // @override
-  // Widget makeHomeScreen() {
-  //   return HomeScreenWidget(screenFactory: this);
-  // }
+  @override
+  Widget makeHomeScreen() {
+    return HomeScreen(screenFactory: this);
+  }
 
   // @override
   // Widget makeMainScreenGenerateRoute() {
