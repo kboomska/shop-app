@@ -6,24 +6,33 @@ class AppBlocObserver extends BlocObserver {
   @override
   void onCreate(BlocBase bloc) {
     super.onCreate(bloc);
-    log('Observer: ${bloc.state.runtimeType}');
+    log('${bloc.runtimeType}: Created');
   }
 
   @override
   void onEvent(Bloc bloc, Object? event) {
     super.onEvent(bloc, event);
-    log('Observer: ${event.runtimeType}');
+    log('${bloc.runtimeType}: ${event.runtimeType}');
   }
 
   @override
-  void onChange(BlocBase bloc, Change change) {
-    super.onChange(bloc, change);
-    log('Observer: ${change.currentState.runtimeType} -> ${change.nextState.runtimeType}');
+  void onTransition(Bloc bloc, Transition transition) {
+    super.onTransition(bloc, transition);
+    final currentState = transition.currentState;
+    final nextState = transition.nextState;
+    log('${bloc.runtimeType}: ${currentState.runtimeType} -> ${nextState.runtimeType}');
   }
 
   @override
   void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
     super.onError(bloc, error, stackTrace);
-    log('Observer: $error');
+    log('${bloc.runtimeType}: $error $stackTrace');
+    log('$stackTrace');
+  }
+
+  @override
+  void onClose(BlocBase bloc) {
+    super.onClose(bloc);
+    log('${bloc.runtimeType}: Closed');
   }
 }
