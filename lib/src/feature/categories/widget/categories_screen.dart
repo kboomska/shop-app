@@ -119,41 +119,57 @@ class _CategoriesScreenBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = context.watch<CategoriesBloc>();
+    final state = context.watch<CategoriesBloc>().state;
 
-    if (bloc.state is CategoriesState$Processing) {
-      return const Center(
-        child: CircularProgressIndicator(
-          color: AppColors.buttonBackground,
+    return switch (state) {
+      CategoriesState$Processing _ => const _CategoriesScreenProcessing(),
+      CategoriesState$Idle _ => state.hasError
+          ? _CategoriesScreenError(state: state)
+          : _CategoryListWidget(state: state),
+    };
+  }
+}
+
+class _CategoriesScreenProcessing extends StatelessWidget {
+  const _CategoriesScreenProcessing();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: CircularProgressIndicator(
+        color: AppColors.buttonBackground,
+      ),
+    );
+  }
+}
+
+class _CategoriesScreenError extends StatelessWidget {
+  final CategoriesState state;
+
+  const _CategoriesScreenError({required this.state});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Text(
+          state.error ?? 'Неизвестная ошибка',
+          textAlign: TextAlign.center,
         ),
-      );
-    }
-
-    final message = bloc.state.error;
-    if (message != null) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Text(
-            message,
-            textAlign: TextAlign.center,
-          ),
-        ),
-      );
-    }
-
-    return const _CategoryListWidget();
+      ),
+    );
   }
 }
 
 class _CategoryListWidget extends StatelessWidget {
-  const _CategoryListWidget();
+  final CategoriesState state;
+
+  const _CategoryListWidget({required this.state});
 
   @override
   Widget build(BuildContext context) {
-    final categoryCount = context.select(
-      (CategoriesBloc bloc) => bloc.state.categories.length,
-    );
+    final categoryCount = state.categories.length;
 
     return ListView.builder(
       itemCount: categoryCount,

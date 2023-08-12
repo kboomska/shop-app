@@ -55,10 +55,10 @@ class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
         case NetworkClientExceptionType.network:
           error = 'Сервер не доступен. Проверьте подключение к сети интернет';
         case NetworkClientExceptionType.other:
-          error = 'Произошла ошибка. Попробуйте еще раз';
+          error = 'Произошла ошибка соединения. Попробуйте еще раз';
       }
     } catch (_) {
-      error = 'Неизвестная ошибка, повторите попытку';
+      error = 'Произошла ошибка при загрузке данных';
       rethrow;
     } finally {
       emit(CategoriesState.idle(
