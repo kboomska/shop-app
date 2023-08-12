@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:shop_app_bloc/src/feature/categories/bloc/categories_state.dart';
 import 'package:shop_app_bloc/src/feature/categories/bloc/categories_bloc.dart';
+import 'package:shop_app_bloc/src/common/theme/app_typography.dart';
 import 'package:shop_app_bloc/src/common/resources/resources.dart';
 import 'package:shop_app_bloc/src/common/theme/app_colors.dart';
 
@@ -53,12 +54,15 @@ class _CategoriesScreenTitle extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(
-          height: 24,
-          width: 24,
-          child: Image.asset(
-            AppIcons.location,
-            color: AppColors.appBarIcon,
+        Padding(
+          padding: const EdgeInsets.only(top: 2.0),
+          child: SizedBox(
+            height: 24,
+            width: 24,
+            child: Image.asset(
+              AppIcons.location,
+              color: AppColors.appBarIcon,
+            ),
           ),
         ),
         const SizedBox(width: 4),
@@ -66,30 +70,16 @@ class _CategoriesScreenTitle extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: 22,
-                child: FittedBox(
-                  child: Text(
-                    'Санкт-Петербург',
-                    style: TextStyle(
-                      overflow: TextOverflow.ellipsis,
-                      color: AppColors.textHeadline,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 18,
-                      height: 1.2,
-                    ),
-                  ),
-                ),
+              Text(
+                'Санкт-Петербург',
+                overflow: TextOverflow.ellipsis,
+                style: AppTypography.headline1,
               ),
               SizedBox(height: 4),
               Text(
                 '12 Августа, 2023',
-                style: TextStyle(
-                  color: AppColors.textSubhead,
-                  fontWeight: FontWeight.w400,
-                  fontSize: 14,
-                  height: 1.15,
-                ),
+                overflow: TextOverflow.ellipsis,
+                style: AppTypography.subhead1,
               ),
             ],
           ),
@@ -155,6 +145,7 @@ class _CategoriesScreenError extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Text(
           state.error ?? 'Неизвестная ошибка',
+          style: AppTypography.subhead1,
           textAlign: TextAlign.center,
         ),
       ),
@@ -223,12 +214,7 @@ class _CategoryItemWidget extends StatelessWidget {
                   ),
                   child: Text(
                     category.name,
-                    style: const TextStyle(
-                      color: AppColors.textHeadline,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 20,
-                      height: 1.25,
-                    ),
+                    style: AppTypography.headlineCategory,
                   ),
                 ),
               ),
