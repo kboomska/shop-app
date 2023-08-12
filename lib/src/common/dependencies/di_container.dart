@@ -5,20 +5,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app_bloc/src/feature/categories/data/api/categories_network_data_provider.dart';
 import 'package:shop_app_bloc/src/feature/categories/data/repository/categories_repository.dart';
 import 'package:shop_app_bloc/src/feature/categories/widget/categories_screen.dart';
+import 'package:shop_app_bloc/src/common/localization/localization_storage.dart';
 import 'package:shop_app_bloc/src/feature/categories/bloc/categories_bloc.dart';
 import 'package:shop_app_bloc/src/feature/home/widget/home_screen.dart';
+import 'package:shop_app_bloc/src/feature/date/cubit/date_cubit.dart';
 import 'package:shop_app_bloc/src/common/network/network_client.dart';
 import 'package:shop_app_bloc/src/common/router/app_navigation.dart';
 import 'package:shop_app_bloc/src/common/network/http_client.dart';
 import 'package:shop_app_bloc/src/common/widget/app.dart';
 import 'package:shop_app_bloc/main.dart';
 
-IAppFactory makeAppFactory() => const AppFactoryImpl();
+IAppFactory makeAppFactory() => AppFactoryImpl();
 
 final class AppFactoryImpl implements IAppFactory {
-  final _diContainer = const DIContainer();
+  final _diContainer = _DIContainer();
 
-  const AppFactoryImpl();
+  AppFactoryImpl();
 
   /// Create [App]
   @override
@@ -27,11 +29,13 @@ final class AppFactoryImpl implements IAppFactory {
       );
 }
 
-final class DIContainer {
-  const DIContainer();
+final class _DIContainer {
+  final ILocalizationStorage _localizationStorage = LocalizationStorageImpl();
 
-  /// Create [ScreenFactoryImpl]
-  IScreenFactory _makeScreenFactory() => ScreenFactoryImpl(this);
+  _DIContainer();
+
+  /// Create [_ScreenFactoryImpl]
+  IScreenFactory _makeScreenFactory() => _ScreenFactoryImpl(this);
 
   /// Create [AppNavigationImpl]
   IAppNavigation _makeAppNavigation() => AppNavigationImpl(
@@ -61,16 +65,40 @@ final class DIContainer {
   CategoriesBloc _makeCategoriesBloc() => CategoriesBloc(
         categoriesRepository: _makeCategoriesRepository(),
       );
+
+  // /// Create [LocalizationStorageImpl]
+  // ILocalizationStorage _makeLocalizationStorage() => LocalizationStorageImpl();
+
+  // /// Create [DateCubit]
+  // DateCubit _makeDateCubit() => DateCubit(
+  //       localizationStorage: localizationStorage,
+  //     );
 }
 
-final class ScreenFactoryImpl implements IScreenFactory {
-  final DIContainer diContainer;
+final class _ScreenFactoryImpl implements IScreenFactory {
+  final _DIContainer _diContainer;
+  DateCubit? _dateCubit;
 
-  const ScreenFactoryImpl(this.diContainer);
+  _ScreenFactoryImpl(this._diContainer);
+
+  DateCubit _makeDateCubit() {
+    final dateCubit = _dateCubit ??
+        DateCubit(localizationStorage: _diContainer._localizationStorage);
+    _dateCubit = dateCubit;
+    return dateCubit;
+  }
+
+  // @override
+  // Widget makeHomeScreen() {
+  //   return HomeScreen(screenFactory: this);
+  // }
 
   @override
   Widget makeHomeScreen() {
-    return HomeScreen(screenFactory: this);
+    return BlocProvider(
+      create: (_) => _makeDateCubit(),
+      child: HomeScreen(screenFactory: this),
+    );
   }
 
   // @override
@@ -80,10 +108,25 @@ final class ScreenFactoryImpl implements IScreenFactory {
   //   );
   // }
 
+  // @override
+  // Widget makeCategoriesScreen() {
+  //   return BlocProvider(
+  //     create: (_) => diContainer._makeCategoriesBloc(),
+  //     child: const CategoriesScreen(),
+  //   );
+  // }
+
   @override
   Widget makeCategoriesScreen() {
-    return BlocProvider(
-      create: (_) => diContainer._makeCategoriesBloc(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => _diContainer._makeCategoriesBloc(),
+        ),
+        BlocProvider(
+          create: (_) => _makeDateCubit(),
+        ),
+      ],
       child: const CategoriesScreen(),
     );
   }

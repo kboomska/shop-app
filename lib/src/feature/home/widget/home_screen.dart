@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:shop_app_bloc/src/feature/date/cubit/date_cubit.dart';
 import 'package:shop_app_bloc/src/common/router/app_navigation.dart';
 import 'package:shop_app_bloc/src/common/resources/resources.dart';
 import 'package:shop_app_bloc/src/common/theme/app_colors.dart';
@@ -22,6 +25,13 @@ class _HomeScreenState extends State<HomeScreen> {
     'Корзина',
     'Аккаунт',
   ];
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final locale = Localizations.localeOf(context);
+    context.read<DateCubit>().setupLocale(locale);
+  }
 
   void onSelectTab(int index) {
     if (_selectedTab == index) return;
