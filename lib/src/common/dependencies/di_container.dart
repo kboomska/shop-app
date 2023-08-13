@@ -9,6 +9,7 @@ import 'package:shop_app_bloc/src/feature/location/data/api/location_api_client.
 import 'package:shop_app_bloc/src/feature/categories/widget/categories_screen.dart';
 import 'package:shop_app_bloc/src/common/localization/localization_storage.dart';
 import 'package:shop_app_bloc/src/feature/categories/bloc/categories_bloc.dart';
+import 'package:shop_app_bloc/src/feature/location/cubit/location_cubit.dart';
 import 'package:shop_app_bloc/src/feature/home/widget/home_screen.dart';
 import 'package:shop_app_bloc/src/feature/date/cubit/date_cubit.dart';
 import 'package:shop_app_bloc/src/common/network/network_client.dart';
@@ -80,14 +81,27 @@ final class _DIContainer {
   ILocationRepository _makeLocationRepository() => LocationRepositoryImpl(
         locationApiClient: _makeLocationApiClient(),
       );
+
+  /// Create [LocationCubit]
+  LocationCubit _makeLocationCubit() => LocationCubit(
+        localizationStorage: _localizationStorage,
+        locationRepository: _makeLocationRepository(),
+      );
 }
 
 final class _ScreenFactoryImpl implements IScreenFactory {
   final _DIContainer _diContainer;
+  LocationCubit? _locationCubit;
   DateCubit? _dateCubit;
 
   _ScreenFactoryImpl({required _DIContainer diContainer})
       : _diContainer = diContainer;
+
+  LocationCubit _locationCubitInstance() {
+    final locationCubit = _locationCubit ?? _diContainer._makeLocationCubit();
+    _locationCubit = locationCubit;
+    return locationCubit;
+  }
 
   DateCubit _dateCubitInstance() {
     final dateCubit = _dateCubit ?? _diContainer._makeDateCubit();
@@ -116,6 +130,9 @@ final class _ScreenFactoryImpl implements IScreenFactory {
       providers: [
         BlocProvider(
           create: (_) => _diContainer._makeCategoriesBloc(),
+        ),
+        BlocProvider(
+          create: (_) => _locationCubitInstance(),
         ),
         BlocProvider(
           create: (_) => _dateCubitInstance(),

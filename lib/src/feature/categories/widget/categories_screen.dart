@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:shop_app_bloc/src/feature/categories/bloc/categories_state.dart';
 import 'package:shop_app_bloc/src/feature/categories/bloc/categories_bloc.dart';
+import 'package:shop_app_bloc/src/feature/location/cubit/location_cubit.dart';
 import 'package:shop_app_bloc/src/feature/date/cubit/date_cubit.dart';
 import 'package:shop_app_bloc/src/common/theme/app_typography.dart';
 import 'package:shop_app_bloc/src/common/resources/resources.dart';
@@ -23,6 +24,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     // Future.microtask(
     //   () => context.read<DateCubit>().setupDate(),
     // );
+    context.read<LocationCubit>().getAddress();
     context.read<DateCubit>().getDate();
   }
 
@@ -45,10 +47,8 @@ class _CategoriesScreenTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locationState = context.watch<LocationCubit>().state;
     final dateState = context.watch<DateCubit>().state;
-    // final location = context.select(
-    //   (MainScreenCubit cubit) => cubit.state.location,
-    // );
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,8 +69,8 @@ class _CategoriesScreenTitle extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Санкт-Петербург',
+              Text(
+                locationState.location,
                 overflow: TextOverflow.ellipsis,
                 style: AppTypography.headline1,
               ),
