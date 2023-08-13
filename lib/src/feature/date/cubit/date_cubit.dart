@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:shop_app_bloc/src/common/localization/localization_storage.dart';
 import 'package:shop_app_bloc/src/feature/date/cubit/date_state.dart';
 
-class DateCubit extends Cubit<DateState> {
+final class DateCubit extends Cubit<DateState> {
   final ILocalizationStorage _localizationStorage;
 
   late DateFormat _dateFormat;

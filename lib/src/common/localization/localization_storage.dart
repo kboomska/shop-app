@@ -3,20 +3,22 @@ import 'package:flutter/material.dart';
 abstract interface class ILocalizationStorage {
   bool isLocaleUpdated(Locale locale);
   String get localeTag;
+  Locale get locale;
 }
 
 final class LocalizationStorageImpl implements ILocalizationStorage {
-  String _localeTag = '';
+  Locale _locale = const Locale('en');
 
   @override
-  String get localeTag => _localeTag;
+  String get localeTag => _locale.toLanguageTag();
+
+  @override
+  Locale get locale => _locale;
 
   @override
   bool isLocaleUpdated(Locale locale) {
-    final localeTag = locale.toLanguageTag();
-
-    if (_localeTag == localeTag) return false;
-    _localeTag = localeTag;
+    if (_locale == locale) return false;
+    _locale = locale;
     return true;
   }
 }
