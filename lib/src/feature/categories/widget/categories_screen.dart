@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:shop_app_bloc/src/feature/categories/bloc/categories_state.dart';
 import 'package:shop_app_bloc/src/feature/categories/bloc/categories_bloc.dart';
+import 'package:shop_app_bloc/src/feature/date/cubit/date_cubit.dart';
 import 'package:shop_app_bloc/src/common/theme/app_typography.dart';
 import 'package:shop_app_bloc/src/common/resources/resources.dart';
 import 'package:shop_app_bloc/src/common/theme/app_colors.dart';
@@ -16,14 +17,14 @@ class CategoriesScreen extends StatefulWidget {
 }
 
 class _CategoriesScreenState extends State<CategoriesScreen> {
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   final locale = Localizations.localeOf(context);
-  //   Future.microtask(
-  //     () => context.read<MainScreenCubit>().setup(locale),
-  //   );
-  // }
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Future.microtask(
+    //   () => context.read<DateCubit>().setupDate(),
+    // );
+    context.read<DateCubit>().getDate();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,9 +45,7 @@ class _CategoriesScreenTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final date = context.select(
-    //   (MainScreenCubit cubit) => cubit.state.date,
-    // );
+    final dateState = context.watch<DateCubit>().state;
     // final location = context.select(
     //   (MainScreenCubit cubit) => cubit.state.location,
     // );
@@ -66,18 +65,18 @@ class _CategoriesScreenTitle extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 4),
-        const Expanded(
+        Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                 'Санкт-Петербург',
                 overflow: TextOverflow.ellipsis,
                 style: AppTypography.headline1,
               ),
-              SizedBox(height: 4),
+              const SizedBox(height: 4),
               Text(
-                '12 Августа, 2023',
+                dateState.date,
                 overflow: TextOverflow.ellipsis,
                 style: AppTypography.subhead1,
               ),
