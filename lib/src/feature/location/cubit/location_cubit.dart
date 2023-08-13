@@ -15,11 +15,16 @@ final class LocationCubit extends Cubit<LocationState> {
     LocationState? initialState,
   })  : _localizationStorage = localizationStorage,
         _locationRepository = locationRepository,
-        super(initialState ?? const LocationState.initial());
+        super(initialState ?? LocationState.initialState);
 
   Future<void> getAddress() async {
+    if (state is LocationState$Processing) return;
+
+    emit(LocationState.processing(location: state.location));
+
     String? location;
     final locale = _localizationStorage.locale;
+
     try {
       location = await _locationRepository.getAddress(locale);
     } on LocationApiClientException catch (e) {
@@ -37,7 +42,8 @@ final class LocationCubit extends Cubit<LocationState> {
     } catch (_) {
       location = 'Неизвестная ошибка, повторите попытку';
     } finally {
-      emit(LocationState(location: location ?? state.location));
+      await Future.delayed(const Duration(milliseconds: 1000));
+      emit(LocationState.idle(location: location ?? state.location));
     }
   }
 }

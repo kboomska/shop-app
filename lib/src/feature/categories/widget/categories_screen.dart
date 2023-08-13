@@ -69,10 +69,12 @@ class _CategoriesScreenTitle extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                locationState.location,
-                overflow: TextOverflow.ellipsis,
-                style: AppTypography.headline1,
+              FittedBox(
+                child: Text(
+                  locationState.location,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTypography.headline1,
+                ),
               ),
               const SizedBox(height: 4),
               Text(

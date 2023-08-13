@@ -1,9 +1,28 @@
 import 'package:flutter/foundation.dart';
 
-final class LocationState extends _$LocationStateBase {
+sealed class LocationState extends _$LocationStateBase {
   const LocationState({required super.location});
 
-  const LocationState.initial() : super(location: '');
+  const factory LocationState.idle({required String location}) =
+      LocationState$Idle;
+
+  const factory LocationState.processing({required String location}) =
+      LocationState$Processing;
+
+  static const LocationState initialState = LocationState.idle(
+    location: '',
+  );
+}
+
+final class LocationState$Idle extends LocationState {
+  const LocationState$Idle({required super.location});
+}
+
+final class LocationState$Processing extends LocationState {
+  const LocationState$Processing({required super.location});
+
+  @override
+  String get location => 'Определяем местоположение...';
 }
 
 @immutable
