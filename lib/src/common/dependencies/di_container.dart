@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:shop_app_bloc/src/feature/categories/data/api/categories_network_data_provider.dart';
 import 'package:shop_app_bloc/src/feature/categories/data/repository/categories_repository.dart';
+import 'package:shop_app_bloc/src/feature/location/data/repository/location_repository.dart';
+import 'package:shop_app_bloc/src/feature/location/data/api/location_api_client.dart';
 import 'package:shop_app_bloc/src/feature/categories/widget/categories_screen.dart';
 import 'package:shop_app_bloc/src/common/localization/localization_storage.dart';
 import 'package:shop_app_bloc/src/feature/categories/bloc/categories_bloc.dart';
@@ -70,6 +72,14 @@ final class _DIContainer {
   DateCubit _makeDateCubit() => DateCubit(
         localizationStorage: _localizationStorage,
       );
+
+  /// Create [LocationApiClientImpl]
+  ILocationApiClient _makeLocationApiClient() => const LocationApiClientImpl();
+
+  /// Create [LocationRepositoryImpl]
+  ILocationRepository _makeLocationRepository() => LocationRepositoryImpl(
+        locationApiClient: _makeLocationApiClient(),
+      );
 }
 
 final class _ScreenFactoryImpl implements IScreenFactory {
@@ -79,7 +89,7 @@ final class _ScreenFactoryImpl implements IScreenFactory {
   _ScreenFactoryImpl({required _DIContainer diContainer})
       : _diContainer = diContainer;
 
-  DateCubit _makeDateCubit() {
+  DateCubit _dateCubitInstance() {
     final dateCubit = _dateCubit ?? _diContainer._makeDateCubit();
     _dateCubit = dateCubit;
     return dateCubit;
@@ -88,7 +98,7 @@ final class _ScreenFactoryImpl implements IScreenFactory {
   @override
   Widget makeHomeScreen() {
     return BlocProvider(
-      create: (_) => _makeDateCubit(),
+      create: (_) => _dateCubitInstance(),
       child: HomeScreen(screenFactory: this),
     );
   }
@@ -108,7 +118,7 @@ final class _ScreenFactoryImpl implements IScreenFactory {
           create: (_) => _diContainer._makeCategoriesBloc(),
         ),
         BlocProvider(
-          create: (_) => _makeDateCubit(),
+          create: (_) => _dateCubitInstance(),
         ),
       ],
       child: const CategoriesScreen(),
