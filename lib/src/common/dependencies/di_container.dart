@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app_bloc/src/feature/categories/data/api/categories_network_data_provider.dart';
 import 'package:shop_app_bloc/src/feature/categories/data/repository/categories_repository.dart';
 import 'package:shop_app_bloc/src/feature/location/data/repository/location_repository.dart';
+import 'package:shop_app_bloc/src/common/localization/localization_data_provider.dart';
 import 'package:shop_app_bloc/src/feature/location/data/api/location_api_client.dart';
 import 'package:shop_app_bloc/src/feature/categories/widget/categories_screen.dart';
 import 'package:shop_app_bloc/src/common/localization/localization_storage.dart';
@@ -69,6 +70,12 @@ final class _DIContainer {
         categoriesRepository: _makeCategoriesRepository(),
       );
 
+  /// Create [LocalizationDataProviderImpl]
+  ILocalizationDataProvider _makeLocalizationDataProvider() =>
+      LocalizationDataProviderImpl(
+        localizationStorage: _localizationStorage,
+      );
+
   /// Create [DateCubit]
   DateCubit _makeDateCubit() => DateCubit(
         localizationStorage: _localizationStorage,
@@ -80,11 +87,11 @@ final class _DIContainer {
   /// Create [LocationRepositoryImpl]
   ILocationRepository _makeLocationRepository() => LocationRepositoryImpl(
         locationApiClient: _makeLocationApiClient(),
+        localizationDataProvider: _makeLocalizationDataProvider(),
       );
 
   /// Create [LocationCubit]
   LocationCubit _makeLocationCubit() => LocationCubit(
-        localizationStorage: _localizationStorage,
         locationRepository: _makeLocationRepository(),
       );
 }
@@ -109,10 +116,25 @@ final class _ScreenFactoryImpl implements IScreenFactory {
     return dateCubit;
   }
 
+  // @override
+  // Widget makeHomeScreen() {
+  //   return BlocProvider(
+  //     create: (_) => _dateCubitInstance(),
+  //     child: HomeScreen(screenFactory: this),
+  //   );
+  // }
+
   @override
   Widget makeHomeScreen() {
-    return BlocProvider(
-      create: (_) => _dateCubitInstance(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => _locationCubitInstance(),
+        ),
+        BlocProvider(
+          create: (_) => _dateCubitInstance(),
+        ),
+      ],
       child: HomeScreen(screenFactory: this),
     );
   }
@@ -124,20 +146,28 @@ final class _ScreenFactoryImpl implements IScreenFactory {
   //   );
   // }
 
+  // @override
+  // Widget makeCategoriesScreen() {
+  //   return MultiBlocProvider(
+  //     providers: [
+  //       BlocProvider(
+  //         create: (_) => _diContainer._makeCategoriesBloc(),
+  //       ),
+  //       BlocProvider(
+  //         create: (_) => _locationCubitInstance(),
+  //       ),
+  //       BlocProvider(
+  //         create: (_) => _dateCubitInstance(),
+  //       ),
+  //     ],
+  //     child: const CategoriesScreen(),
+  //   );
+  // }
+
   @override
   Widget makeCategoriesScreen() {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (_) => _diContainer._makeCategoriesBloc(),
-        ),
-        BlocProvider(
-          create: (_) => _locationCubitInstance(),
-        ),
-        BlocProvider(
-          create: (_) => _dateCubitInstance(),
-        ),
-      ],
+    return BlocProvider(
+      create: (_) => _diContainer._makeCategoriesBloc(),
       child: const CategoriesScreen(),
     );
   }

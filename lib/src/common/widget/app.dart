@@ -40,6 +40,7 @@ class App extends StatelessWidget {
       ],
       supportedLocales: const [
         Locale('ru', 'RU'),
+        Locale('en', 'EN'),
       ],
       routes: navigation.routes,
       initialRoute: AppNavigationRouteNames.home,

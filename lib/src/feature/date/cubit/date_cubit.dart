@@ -18,20 +18,18 @@ final class DateCubit extends Cubit<DateState> {
   })  : _localizationStorage = localizationStorage,
         super(initialState ?? const DateState.initial());
 
-  void setupLocale(Locale locale) {
+  void _setupLocale(Locale locale) {
     if (!_localizationStorage.isLocaleUpdated(locale)) return;
 
     _dateFormat = DateFormat.MMMMd(_localizationStorage.localeTag);
     _yearFormat = DateFormat.y(_localizationStorage.localeTag);
-
-    emit(DateState(localTag: _localizationStorage.localeTag, date: state.date));
   }
 
-  void getDate() {
-    final String localTag = _localizationStorage.localeTag;
+  void getDate(Locale locale) {
+    _setupLocale(locale);
     final String date =
         '${_dateFormat.format(DateTime.now())}, ${_yearFormat.format(DateTime.now())}';
 
-    emit(DateState(localTag: localTag, date: date));
+    emit(DateState(date: date));
   }
 }

@@ -19,6 +19,7 @@ final class LocalizationStorageImpl implements ILocalizationStorage {
   bool isLocaleUpdated(Locale locale) {
     if (_locale == locale) return false;
     _locale = locale;
+    print(locale.toLanguageTag());
     return true;
   }
 }

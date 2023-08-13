@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:shop_app_bloc/src/feature/location/cubit/location_cubit.dart';
 import 'package:shop_app_bloc/src/feature/date/cubit/date_cubit.dart';
 import 'package:shop_app_bloc/src/common/router/app_navigation.dart';
 import 'package:shop_app_bloc/src/common/resources/resources.dart';
@@ -29,8 +30,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    // Future.microtask(
+    //   () => context.read<DateCubit>().setupDate(),
+    // );
     final locale = Localizations.localeOf(context);
-    context.read<DateCubit>().setupLocale(locale);
+    context.read<DateCubit>().getDate(locale);
+    context.read<LocationCubit>().getAddress();
   }
 
   void onSelectTab(int index) {

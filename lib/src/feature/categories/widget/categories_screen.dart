@@ -18,15 +18,16 @@ class CategoriesScreen extends StatefulWidget {
 }
 
 class _CategoriesScreenState extends State<CategoriesScreen> {
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // Future.microtask(
-    //   () => context.read<DateCubit>().setupDate(),
-    // );
-    context.read<LocationCubit>().getAddress();
-    context.read<DateCubit>().getDate();
-  }
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   // Future.microtask(
+  //   //   () => context.read<DateCubit>().setupDate(),
+  //   // );
+  //   final locale = Localizations.localeOf(context);
+  //   context.read<LocationCubit>().getAddress(locale);
+  //   context.read<DateCubit>().getDate(locale);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -69,11 +70,14 @@ class _CategoriesScreenTitle extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              FittedBox(
-                child: Text(
-                  locationState.location,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppTypography.headline1,
+              SizedBox(
+                height: 22,
+                child: FittedBox(
+                  child: Text(
+                    locationState.location,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTypography.headline1,
+                  ),
                 ),
               ),
               const SizedBox(height: 4),
