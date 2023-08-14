@@ -34,8 +34,8 @@ class _HomeScreenState extends State<HomeScreen> {
     //   () => context.read<DateCubit>().setupDate(),
     // );
     final locale = Localizations.localeOf(context);
+    context.read<LocationCubit>().getAddress(locale);
     context.read<DateCubit>().getDate(locale);
-    context.read<LocationCubit>().getAddress();
   }
 
   void onSelectTab(int index) {

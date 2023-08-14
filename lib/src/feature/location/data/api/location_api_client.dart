@@ -21,7 +21,6 @@ final class LocationApiClientImpl implements ILocationApiClient {
       position.longitude,
       localeIdentifier: locale.toLanguageTag(),
     );
-    print(address.first.locality);
     return address.first.locality;
   }
 

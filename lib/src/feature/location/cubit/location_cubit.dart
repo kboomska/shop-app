@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:shop_app_bloc/src/feature/location/data/api/location_api_client_exception.dart';
@@ -13,15 +15,19 @@ final class LocationCubit extends Cubit<LocationState> {
   })  : _locationRepository = locationRepository,
         super(initialState ?? LocationState.initialState);
 
-  Future<void> getAddress() async {
+  Future<void> getAddress(Locale locale) async {
     if (state is LocationState$Processing) return;
+    if (locale == state.locale) return;
 
-    emit(LocationState.processing(location: state.location));
+    emit(LocationState.processing(
+      location: 'Определяем местоположение...',
+      locale: locale,
+    ));
 
     String? location;
 
     try {
-      location = await _locationRepository.getAddress();
+      location = await _locationRepository.getAddress(locale);
     } on LocationApiClientException catch (e) {
       switch (e.type) {
         case LocationApiClientExceptionType.permission:
@@ -38,7 +44,10 @@ final class LocationCubit extends Cubit<LocationState> {
       location = 'Неизвестная ошибка, повторите попытку';
     } finally {
       await Future.delayed(const Duration(milliseconds: 1000));
-      emit(LocationState.idle(location: location ?? state.location));
+      emit(LocationState.idle(
+        location: location ?? 'Не удалось Вас найти',
+        locale: state.locale,
+      ));
     }
   }
 }
