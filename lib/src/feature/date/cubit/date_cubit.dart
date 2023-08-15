@@ -3,33 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
-import 'package:shop_app_bloc/src/common/localization/localization_storage.dart';
 import 'package:shop_app_bloc/src/feature/date/cubit/date_state.dart';
 
 final class DateCubit extends Cubit<DateState> {
-  final ILocalizationStorage _localizationStorage;
-
-  late DateFormat _dateFormat;
-  late DateFormat _yearFormat;
-
   DateCubit({
-    required ILocalizationStorage localizationStorage,
     DateState? initialState,
-  })  : _localizationStorage = localizationStorage,
-        super(initialState ?? const DateState.initial());
-
-  void _setupLocale(Locale locale) {
-    if (!_localizationStorage.isLocaleUpdated(locale)) return;
-
-    _dateFormat = DateFormat.MMMMd(_localizationStorage.localeTag);
-    _yearFormat = DateFormat.y(_localizationStorage.localeTag);
-  }
+  }) : super(initialState ?? const DateState.initial());
 
   void getDate(Locale locale) {
-    _setupLocale(locale);
-    final String date =
-        '${_dateFormat.format(DateTime.now())}, ${_yearFormat.format(DateTime.now())}';
+    final localeTag = locale.toLanguageTag();
+    if (localeTag == state.localeTag) return;
 
-    emit(DateState(date: date));
+    final dateFormatted = DateFormat.MMMMd(localeTag).format(DateTime.now());
+    final yearFormatted = DateFormat.y(localeTag).format(DateTime.now());
+
+    final String date = '$dateFormatted, $yearFormatted';
+
+    emit(DateState(date: date, localeTag: localeTag));
   }
 }

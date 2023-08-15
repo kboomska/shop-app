@@ -30,9 +30,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // Future.microtask(
-    //   () => context.read<DateCubit>().setupDate(),
-    // );
     final locale = Localizations.localeOf(context);
     context.read<LocationCubit>().getAddress(locale);
     context.read<DateCubit>().getDate(locale);

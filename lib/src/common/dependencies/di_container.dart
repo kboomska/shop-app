@@ -7,7 +7,6 @@ import 'package:shop_app_bloc/src/feature/categories/data/repository/categories_
 import 'package:shop_app_bloc/src/feature/location/data/repository/location_repository.dart';
 import 'package:shop_app_bloc/src/feature/location/data/api/location_api_client.dart';
 import 'package:shop_app_bloc/src/feature/categories/widget/categories_screen.dart';
-import 'package:shop_app_bloc/src/common/localization/localization_storage.dart';
 import 'package:shop_app_bloc/src/feature/categories/bloc/categories_bloc.dart';
 import 'package:shop_app_bloc/src/feature/location/cubit/location_cubit.dart';
 import 'package:shop_app_bloc/src/feature/home/widget/home_screen.dart';
@@ -18,12 +17,12 @@ import 'package:shop_app_bloc/src/common/network/http_client.dart';
 import 'package:shop_app_bloc/src/common/widget/app.dart';
 import 'package:shop_app_bloc/main.dart';
 
-IAppFactory makeAppFactory() => AppFactoryImpl();
+IAppFactory makeAppFactory() => const AppFactoryImpl();
 
 final class AppFactoryImpl implements IAppFactory {
-  final _diContainer = _DIContainer();
+  final _diContainer = const _DIContainer();
 
-  AppFactoryImpl();
+  const AppFactoryImpl();
 
   /// Create [App]
   @override
@@ -33,9 +32,7 @@ final class AppFactoryImpl implements IAppFactory {
 }
 
 final class _DIContainer {
-  final ILocalizationStorage _localizationStorage = LocalizationStorageImpl();
-
-  _DIContainer();
+  const _DIContainer();
 
   /// Create [_ScreenFactoryImpl]
   IScreenFactory _makeScreenFactory() => _ScreenFactoryImpl(diContainer: this);
@@ -69,16 +66,8 @@ final class _DIContainer {
         categoriesRepository: _makeCategoriesRepository(),
       );
 
-  // /// Create [LocalizationDataProviderImpl]
-  // ILocalizationDataProvider _makeLocalizationDataProvider() =>
-  //     LocalizationDataProviderImpl(
-  //       localizationStorage: _localizationStorage,
-  //     );
-
   /// Create [DateCubit]
-  DateCubit _makeDateCubit() => DateCubit(
-        localizationStorage: _localizationStorage,
-      );
+  DateCubit _makeDateCubit() => DateCubit();
 
   /// Create [LocationApiClientImpl]
   ILocationApiClient _makeLocationApiClient() => const LocationApiClientImpl();
@@ -96,44 +85,19 @@ final class _DIContainer {
 
 final class _ScreenFactoryImpl implements IScreenFactory {
   final _DIContainer _diContainer;
-  // LocationCubit? _locationCubit;
-  DateCubit? _dateCubit;
 
-  _ScreenFactoryImpl({required _DIContainer diContainer})
+  const _ScreenFactoryImpl({required _DIContainer diContainer})
       : _diContainer = diContainer;
-
-  // LocationCubit _locationCubitInstance() {
-  //   final locationCubit = _locationCubit ?? _diContainer._makeLocationCubit();
-  //   _locationCubit = locationCubit;
-  //   return locationCubit;
-  // }
-
-  DateCubit _dateCubitInstance() {
-    final dateCubit = _dateCubit ?? _diContainer._makeDateCubit();
-    _dateCubit = dateCubit;
-    return dateCubit;
-  }
-
-  // @override
-  // Widget makeHomeScreen() {
-  //   return BlocProvider(
-  //     create: (_) => _dateCubitInstance(),
-  //     child: HomeScreen(screenFactory: this),
-  //   );
-  // }
 
   @override
   Widget makeHomeScreen() {
     return MultiBlocProvider(
       providers: [
-        // BlocProvider(
-        //   create: (_) => _locationCubitInstance(),
-        // ),
         BlocProvider(
           create: (_) => _diContainer._makeLocationCubit(),
         ),
         BlocProvider(
-          create: (_) => _dateCubitInstance(),
+          create: (_) => _diContainer._makeDateCubit(),
         ),
       ],
       child: HomeScreen(screenFactory: this),
@@ -144,24 +108,6 @@ final class _ScreenFactoryImpl implements IScreenFactory {
   // Widget makeMainScreenGenerateRoute() {
   //   return Navigator(
   //     onGenerateRoute: diContainer._makeShopAppNavigation().onGenerateRoute,
-  //   );
-  // }
-
-  // @override
-  // Widget makeCategoriesScreen() {
-  //   return MultiBlocProvider(
-  //     providers: [
-  //       BlocProvider(
-  //         create: (_) => _diContainer._makeCategoriesBloc(),
-  //       ),
-  //       BlocProvider(
-  //         create: (_) => _locationCubitInstance(),
-  //       ),
-  //       BlocProvider(
-  //         create: (_) => _dateCubitInstance(),
-  //       ),
-  //     ],
-  //     child: const CategoriesScreen(),
   //   );
   // }
 
