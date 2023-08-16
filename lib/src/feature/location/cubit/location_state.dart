@@ -3,35 +3,35 @@ import 'package:flutter/material.dart';
 sealed class LocationState extends _$LocationStateBase {
   const LocationState({
     required super.location,
-    required super.locale,
+    required super.localeTag,
   });
 
   const factory LocationState.idle({
     required String location,
-    required Locale locale,
+    required String localeTag,
   }) = LocationState$Idle;
 
   const factory LocationState.processing({
     required String location,
-    required Locale locale,
+    required String localeTag,
   }) = LocationState$Processing;
 
   static LocationState initialState = const LocationState.idle(
     location: '',
-    locale: Locale('und'),
+    localeTag: '',
   );
 }
 
 final class LocationState$Idle extends LocationState {
   const LocationState$Idle({
-    required super.locale,
+    required super.localeTag,
     required super.location,
   });
 }
 
 final class LocationState$Processing extends LocationState {
   const LocationState$Processing({
-    required super.locale,
+    required super.localeTag,
     required super.location,
   });
 }
@@ -39,11 +39,11 @@ final class LocationState$Processing extends LocationState {
 @immutable
 abstract base class _$LocationStateBase {
   final String location;
-  final Locale locale;
+  final String localeTag;
 
   const _$LocationStateBase({
     required this.location,
-    required this.locale,
+    required this.localeTag,
   });
 
   @override
@@ -52,9 +52,9 @@ abstract base class _$LocationStateBase {
 
     return other is _$LocationStateBase &&
         other.location == location &&
-        other.locale == locale;
+        other.localeTag == localeTag;
   }
 
   @override
-  int get hashCode => location.hashCode ^ locale.hashCode;
+  int get hashCode => location.hashCode ^ localeTag.hashCode;
 }

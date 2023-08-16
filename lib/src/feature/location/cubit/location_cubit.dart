@@ -1,8 +1,6 @@
-import 'package:flutter/material.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:shop_app_bloc/src/feature/location/data/api/location_api_client_exception.dart';
+import 'package:shop_app_bloc/src/feature/location/data/api/geolocator_api_client_exception.dart';
 import 'package:shop_app_bloc/src/feature/location/data/repository/location_repository.dart';
 import 'package:shop_app_bloc/src/feature/location/cubit/location_state.dart';
 
@@ -15,19 +13,19 @@ final class LocationCubit extends Cubit<LocationState> {
   })  : _locationRepository = locationRepository,
         super(initialState ?? LocationState.initialState);
 
-  Future<void> getAddress(Locale locale) async {
+  Future<void> getAddress(String localeTag) async {
     if (state is LocationState$Processing) return;
-    if (locale == state.locale) return;
+    if (localeTag == state.localeTag) return;
 
     emit(LocationState.processing(
       location: 'Определяем местоположение...',
-      locale: locale,
+      localeTag: localeTag,
     ));
 
     String? location;
 
     try {
-      location = await _locationRepository.getAddress(locale);
+      location = await _locationRepository.getAddress(localeTag);
     } on LocationApiClientException catch (e) {
       switch (e.type) {
         case LocationApiClientExceptionType.permission:
@@ -46,7 +44,7 @@ final class LocationCubit extends Cubit<LocationState> {
       await Future.delayed(const Duration(milliseconds: 1000));
       emit(LocationState.idle(
         location: location ?? 'Не удалось Вас найти',
-        locale: state.locale,
+        localeTag: state.localeTag,
       ));
     }
   }

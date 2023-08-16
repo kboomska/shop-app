@@ -1,20 +1,27 @@
-import 'package:flutter/material.dart';
-
-import 'package:shop_app_bloc/src/feature/location/data/api/location_api_client.dart';
+import 'package:shop_app_bloc/src/feature/location/data/api/geolocator_api_client.dart';
+import 'package:shop_app_bloc/src/feature/location/data/api/geocoding_api_client.dart';
 
 abstract interface class ILocationRepository {
-  Future<String?> getAddress(Locale locale);
+  Future<String?> getAddress(String localeTag);
 }
 
 final class LocationRepositoryImpl implements ILocationRepository {
-  final ILocationApiClient _locationApiClient;
+  final IGeolocatorApiClient _geolocatorApiClient;
+  final IGeocodingApiClient _geocodingApiClient;
 
   const LocationRepositoryImpl({
-    required ILocationApiClient locationApiClient,
-  }) : _locationApiClient = locationApiClient;
+    required IGeolocatorApiClient geolocatorApiClient,
+    required IGeocodingApiClient geocodingApiClient,
+  })  : _geolocatorApiClient = geolocatorApiClient,
+        _geocodingApiClient = geocodingApiClient;
 
   @override
-  Future<String?> getAddress(Locale locale) async {
-    return _locationApiClient.getAddress(locale);
+  Future<String?> getAddress(String localeTag) async {
+    final position = await _geolocatorApiClient.determinePosition();
+
+    return _geocodingApiClient.getPlacemark(
+      localeIdentifier: localeTag,
+      position: position,
+    );
   }
 }

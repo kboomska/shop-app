@@ -5,7 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app_bloc/src/feature/categories/data/api/categories_network_data_provider.dart';
 import 'package:shop_app_bloc/src/feature/categories/data/repository/categories_repository.dart';
 import 'package:shop_app_bloc/src/feature/location/data/repository/location_repository.dart';
-import 'package:shop_app_bloc/src/feature/location/data/api/location_api_client.dart';
+import 'package:shop_app_bloc/src/feature/location/data/api/geolocator_api_client.dart';
+import 'package:shop_app_bloc/src/feature/location/data/api/geocoding_api_client.dart';
 import 'package:shop_app_bloc/src/feature/categories/widget/categories_screen.dart';
 import 'package:shop_app_bloc/src/feature/categories/bloc/categories_bloc.dart';
 import 'package:shop_app_bloc/src/feature/location/cubit/location_cubit.dart';
@@ -70,12 +71,18 @@ final class _DIContainer {
   /// Create [DateCubit]
   // DateCubit _makeDateCubit() => DateCubit();
 
-  /// Create [LocationApiClientImpl]
-  ILocationApiClient _makeLocationApiClient() => const LocationApiClientImpl();
+  /// Create [GeolocatorApiClientImpl]
+  IGeolocatorApiClient _makeGeolocatorApiClient() =>
+      const GeolocatorApiClientImpl();
+
+  /// Create [GeocodingApiClientImpl]
+  IGeocodingApiClient _makeGeocodingApiClient() =>
+      const GeocodingApiClientImpl();
 
   /// Create [LocationRepositoryImpl]
   ILocationRepository _makeLocationRepository() => LocationRepositoryImpl(
-        locationApiClient: _makeLocationApiClient(),
+        geolocatorApiClient: _makeGeolocatorApiClient(),
+        geocodingApiClient: _makeGeocodingApiClient(),
       );
 
   /// Create [LocationCubit]
