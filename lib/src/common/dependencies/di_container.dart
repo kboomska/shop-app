@@ -10,6 +10,7 @@ import 'package:shop_app_bloc/src/feature/categories/widget/categories_screen.da
 import 'package:shop_app_bloc/src/feature/categories/bloc/categories_bloc.dart';
 import 'package:shop_app_bloc/src/feature/location/cubit/location_cubit.dart';
 import 'package:shop_app_bloc/src/feature/home/widget/home_screen.dart';
+import 'package:shop_app_bloc/src/feature/date/widget/date_scope.dart';
 import 'package:shop_app_bloc/src/feature/date/cubit/date_cubit.dart';
 import 'package:shop_app_bloc/src/common/network/network_client.dart';
 import 'package:shop_app_bloc/src/common/router/app_navigation.dart';
@@ -67,7 +68,7 @@ final class _DIContainer {
       );
 
   /// Create [DateCubit]
-  DateCubit _makeDateCubit() => DateCubit();
+  // DateCubit _makeDateCubit() => DateCubit();
 
   /// Create [LocationApiClientImpl]
   ILocationApiClient _makeLocationApiClient() => const LocationApiClientImpl();
@@ -96,11 +97,13 @@ final class _ScreenFactoryImpl implements IScreenFactory {
         BlocProvider(
           create: (_) => _diContainer._makeLocationCubit(),
         ),
-        BlocProvider(
-          create: (_) => _diContainer._makeDateCubit(),
-        ),
+        // BlocProvider(
+        //   create: (_) => _diContainer._makeDateCubit(),
+        // ),
       ],
-      child: HomeScreen(screenFactory: this),
+      child: DateScope(
+        child: HomeScreen(screenFactory: this),
+      ),
     );
   }
 

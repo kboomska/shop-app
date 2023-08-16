@@ -1,3 +1,6 @@
+import 'dart:developer';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,11 +12,15 @@ abstract interface class IAppFactory {
   Widget makeApp();
 }
 
-final appFactory = makeAppFactory();
-
 void main() {
-  Bloc.observer = AppBlocObserver();
+  runZonedGuarded(() {
+    final appFactory = makeAppFactory();
+    final app = appFactory.makeApp();
 
-  final app = appFactory.makeApp();
-  runApp(app);
+    Bloc.observer = AppBlocObserver();
+
+    runApp(app);
+  }, (error, stackTrace) {
+    log(error.toString(), stackTrace: stackTrace);
+  });
 }

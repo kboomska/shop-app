@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:shop_app_bloc/src/feature/location/cubit/location_cubit.dart';
-import 'package:shop_app_bloc/src/feature/date/cubit/date_cubit.dart';
 import 'package:shop_app_bloc/src/common/router/app_navigation.dart';
 import 'package:shop_app_bloc/src/common/resources/resources.dart';
 import 'package:shop_app_bloc/src/common/theme/app_colors.dart';
@@ -32,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.didChangeDependencies();
     final locale = Localizations.localeOf(context);
     context.read<LocationCubit>().getAddress(locale);
-    context.read<DateCubit>().getDate(locale);
+    // context.read<DateCubit>().getDate(locale);
   }
 
   void onSelectTab(int index) {
@@ -61,9 +60,10 @@ class _HomeScreenState extends State<HomeScreen> {
           Center(
             child: Text(_bottomNavigationBarOptions[2]),
           ),
-          Center(
-            child: Text(_bottomNavigationBarOptions[3]),
-          ),
+          // Center(
+          //   child: Text(_bottomNavigationBarOptions[3]),
+          // ),
+          widget.screenFactory.makeCategoriesScreen(),
         ],
       ),
     );

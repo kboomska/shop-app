@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app_bloc/src/feature/categories/bloc/categories_state.dart';
 import 'package:shop_app_bloc/src/feature/categories/bloc/categories_bloc.dart';
 import 'package:shop_app_bloc/src/feature/location/cubit/location_cubit.dart';
-import 'package:shop_app_bloc/src/feature/date/cubit/date_cubit.dart';
+import 'package:shop_app_bloc/src/feature/date/widget/date_widget.dart';
 import 'package:shop_app_bloc/src/common/theme/app_typography.dart';
 import 'package:shop_app_bloc/src/common/resources/resources.dart';
 import 'package:shop_app_bloc/src/common/theme/app_colors.dart';
@@ -18,17 +18,6 @@ class CategoriesScreen extends StatefulWidget {
 }
 
 class _CategoriesScreenState extends State<CategoriesScreen> {
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   // Future.microtask(
-  //   //   () => context.read<DateCubit>().setupDate(),
-  //   // );
-  //   final locale = Localizations.localeOf(context);
-  //   context.read<LocationCubit>().getAddress(locale);
-  //   context.read<DateCubit>().getDate(locale);
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +38,7 @@ class _CategoriesScreenTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final locationState = context.watch<LocationCubit>().state;
-    final dateState = context.watch<DateCubit>().state;
+    // final dateState = context.watch<DateCubit>().state;
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,11 +70,7 @@ class _CategoriesScreenTitle extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 4),
-              Text(
-                dateState.date,
-                overflow: TextOverflow.ellipsis,
-                style: AppTypography.subhead1,
-              ),
+              const DateWidget(),
             ],
           ),
         ),
