@@ -2,7 +2,7 @@ import 'package:shop_app_bloc/src/feature/location/data/api/geolocator_api_clien
 import 'package:shop_app_bloc/src/feature/location/data/api/geocoding_api_client.dart';
 
 abstract interface class ILocationRepository {
-  Future<String?> getAddress(String localeTag);
+  Future<String?> getAddress(String localeIdentifier);
 }
 
 final class LocationRepositoryImpl implements ILocationRepository {
@@ -16,11 +16,11 @@ final class LocationRepositoryImpl implements ILocationRepository {
         _geocodingApiClient = geocodingApiClient;
 
   @override
-  Future<String?> getAddress(String localeTag) async {
+  Future<String?> getAddress(String localeIdentifier) async {
     final position = await _geolocatorApiClient.determinePosition();
 
     return _geocodingApiClient.getPlacemark(
-      localeIdentifier: localeTag,
+      localeIdentifier: localeIdentifier,
       position: position,
     );
   }

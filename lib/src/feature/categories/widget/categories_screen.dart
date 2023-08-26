@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:shop_app_bloc/src/feature/categories/bloc/categories_state.dart';
 import 'package:shop_app_bloc/src/feature/categories/bloc/categories_bloc.dart';
-import 'package:shop_app_bloc/src/feature/location/cubit/location_cubit.dart';
+import 'package:shop_app_bloc/src/feature/location/widget/location_widget.dart';
 import 'package:shop_app_bloc/src/feature/date/widget/date_widget.dart';
 import 'package:shop_app_bloc/src/common/theme/app_typography.dart';
 import 'package:shop_app_bloc/src/common/resources/resources.dart';
@@ -37,9 +37,6 @@ class _CategoriesScreenTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final locationState = context.watch<LocationCubit>().state;
-    // final dateState = context.watch<DateCubit>().state;
-
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -55,22 +52,13 @@ class _CategoriesScreenTitle extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 4),
-        Expanded(
+        const Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: 22,
-                child: FittedBox(
-                  child: Text(
-                    locationState.location,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTypography.headline1,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 4),
-              const DateWidget(),
+              LocationWidget(),
+              SizedBox(height: 4),
+              DateWidget(),
             ],
           ),
         ),
@@ -130,11 +118,14 @@ class _CategoriesScreenError extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final errorMessage = state.error;
+
+    if (errorMessage == null) return const SizedBox.shrink();
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Text(
-          state.error ?? 'Неизвестная ошибка',
+          errorMessage,
           style: AppTypography.subhead1,
           textAlign: TextAlign.center,
         ),

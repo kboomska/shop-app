@@ -16,12 +16,12 @@ final class GeocodingApiClientImpl implements IGeocodingApiClient {
     required (double, double) position,
   }) async {
     final (latitude, longitude) = position;
-
     final placemark = await placemarkFromCoordinates(
       latitude,
       longitude,
       localeIdentifier: localeIdentifier,
     );
+
     return placemark.first.locality;
   }
 }

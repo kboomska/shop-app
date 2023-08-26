@@ -29,8 +29,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final localeTag = Localizations.localeOf(context).toLanguageTag();
-    context.read<LocationCubit>().getAddress(localeTag);
+    final locale = Localizations.localeOf(context);
+    context.read<LocationCubit>().getAddress(makeLocaleIdentifier(locale));
+  }
+
+  String makeLocaleIdentifier(Locale locale) {
+    return '${locale.languageCode}_${locale.countryCode}';
   }
 
   void onSelectTab(int index) {

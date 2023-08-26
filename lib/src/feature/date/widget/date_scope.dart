@@ -105,8 +105,7 @@ class _InheritedDateScope extends InheritedWidget {
           : context.getInheritedWidgetOfExactType<_InheritedDateScope>();
 
   static Never _notFoundInheritedWidgetOfExactType() => throw ArgumentError(
-        'Out of scope, not found inherited widget '
-            'a _InheritedDateScope of the exact type',
+        'Out of scope, not found inherited widget a _InheritedDateScope of the exact type',
         'out_of_scope',
       );
 
