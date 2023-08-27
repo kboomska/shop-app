@@ -12,7 +12,6 @@ import 'package:shop_app_bloc/src/feature/categories/bloc/categories_bloc.dart';
 import 'package:shop_app_bloc/src/feature/location/cubit/location_cubit.dart';
 import 'package:shop_app_bloc/src/feature/home/widget/home_screen.dart';
 import 'package:shop_app_bloc/src/feature/date/widget/date_scope.dart';
-import 'package:shop_app_bloc/src/feature/date/cubit/date_cubit.dart';
 import 'package:shop_app_bloc/src/common/network/network_client.dart';
 import 'package:shop_app_bloc/src/common/router/app_navigation.dart';
 import 'package:shop_app_bloc/src/common/network/http_client.dart';
@@ -68,9 +67,6 @@ final class _DIContainer {
         categoriesRepository: _makeCategoriesRepository(),
       );
 
-  /// Create [DateCubit]
-  // DateCubit _makeDateCubit() => DateCubit();
-
   /// Create [GeolocatorApiClientImpl]
   IGeolocatorApiClient _makeGeolocatorApiClient() =>
       const GeolocatorApiClientImpl();
@@ -99,15 +95,8 @@ final class _ScreenFactoryImpl implements IScreenFactory {
 
   @override
   Widget makeHomeScreen() {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (_) => _diContainer._makeLocationCubit(),
-        ),
-        // BlocProvider(
-        //   create: (_) => _diContainer._makeDateCubit(),
-        // ),
-      ],
+    return BlocProvider(
+      create: (_) => _diContainer._makeLocationCubit(),
       child: DateScope(
         child: HomeScreen(screenFactory: this),
       ),

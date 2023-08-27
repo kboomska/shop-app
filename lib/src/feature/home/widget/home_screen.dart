@@ -63,10 +63,9 @@ class _HomeScreenState extends State<HomeScreen> {
           Center(
             child: Text(_bottomNavigationBarOptions[2]),
           ),
-          // Center(
-          //   child: Text(_bottomNavigationBarOptions[3]),
-          // ),
-          widget.screenFactory.makeCategoriesScreen(),
+          Center(
+            child: Text(_bottomNavigationBarOptions[3]),
+          ),
         ],
       ),
     );
