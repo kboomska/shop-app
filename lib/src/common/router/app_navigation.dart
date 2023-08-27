@@ -4,11 +4,11 @@ import 'package:shop_app_bloc/src/common/router/app_navigation_route_names.dart'
 import 'package:shop_app_bloc/src/common/widget/app.dart';
 
 abstract interface class IScreenFactory {
-  // Widget makeCategoryScreen(CategoryScreenConfiguration configuration);
-  // Widget makeMainScreenGenerateRoute();
+  Widget makeCategoriesScreenGenerateRoute();
   // Widget makeProductScreen(Dish dish);
   // Widget makeShoppingCartScreen();
   Widget makeCategoriesScreen();
+  Widget makeDishesScreen();
   Widget makeHomeScreen();
 }
 
@@ -24,11 +24,12 @@ class AppNavigationImpl implements IAppNavigation {
   @override
   Route<Object> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
-      // case AppNavigationRouteNames.category:
-      //   final configuration = settings.arguments as CategoryScreenConfiguration;
-      //   return MaterialPageRoute(
-      //     builder: (_) => screenFactory.makeCategoryScreen(configuration),
-      //   );
+      case AppNavigationRouteNames.dishes:
+        // final configuration = settings.arguments as CategoryScreenConfiguration;
+        return MaterialPageRoute(
+          // builder: (_) => screenFactory.makeCategoryScreen(configuration),
+          builder: (_) => screenFactory.makeDishesScreen(),
+        );
       default:
         return MaterialPageRoute(
           builder: (_) => screenFactory.makeCategoriesScreen(),

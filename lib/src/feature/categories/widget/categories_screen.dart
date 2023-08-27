@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:shop_app_bloc/src/common/router/app_navigation_route_names.dart';
 import 'package:shop_app_bloc/src/feature/categories/bloc/categories_state.dart';
 import 'package:shop_app_bloc/src/feature/categories/bloc/categories_bloc.dart';
 import 'package:shop_app_bloc/src/feature/location/widget/location_widget.dart';
@@ -160,17 +161,18 @@ class _CategoryItemWidget extends StatelessWidget {
     final bloc = context.read<CategoriesBloc>();
     final category = bloc.state.categories[index];
 
-    // void onCategoryTap(context) {
-    //   final configuration = CategoryScreenConfiguration(
-    //     id: category.id,
-    //     name: category.name,
-    //   );
+    void onCategoryTap(context) {
+      // final configuration = CategoryScreenConfiguration(
+      //   id: category.id,
+      //   name: category.name,
+      // );
 
-    //   Navigator.of(context).pushNamed(
-    //     MainNavigationRouteNames.category,
-    //     arguments: configuration,
-    //   );
-    // }
+      Navigator.of(context).pushNamed(
+        AppNavigationRouteNames.dishes,
+        // MainNavigationRouteNames.category,
+        // arguments: configuration,
+      );
+    }
 
     return Padding(
       padding: const EdgeInsets.only(left: 16, top: 8, right: 16),
@@ -182,7 +184,7 @@ class _CategoryItemWidget extends StatelessWidget {
         child: InkWell(
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
-          // onTap: () => onCategoryTap(context),
+          onTap: () => onCategoryTap(context),
           child: Stack(
             children: [
               Image.network(category.imageUrl),

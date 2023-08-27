@@ -84,59 +84,38 @@ class _DishFilter extends StatelessWidget {
       ),
       child: SizedBox(
         height: 35,
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: AppColors.dishTagBackgroundSelected,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 10,
-            ),
-            child: Text(
-              'Тэг блюда',
-              textAlign: TextAlign.start,
-              style: AppTypography.headlineDishTag(
-                AppColors.dishTagTextSelected,
+        child: ListView.separated(
+          shrinkWrap: true,
+          itemCount: 4, //tags.length,
+          scrollDirection: Axis.horizontal,
+          physics: const BouncingScrollPhysics(),
+          separatorBuilder: (context, index) => const SizedBox(width: 8),
+          itemBuilder: (context, index) {
+            return InkWell(
+              // onTap: () => model.onTagTap(index),
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: AppColors
+                      .dishTagBackgroundSelected, // tags[index].backgroundColor,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 10,
+                  ),
+                  child: Text(
+                    'Тэг блюда', // tags[index].name,
+                    textAlign: TextAlign.start,
+                    style: AppTypography.headlineDishTag(
+                      AppColors.dishTagTextSelected, // tags[index].titleColor,
+                    ),
+                  ),
+                ),
               ),
-            ),
-          ),
+            );
+          },
         ),
-        // child: ListView.separated(
-        //   shrinkWrap: true,
-        //   itemCount: tags.length,
-        //   scrollDirection: Axis.horizontal,
-        //   physics: const BouncingScrollPhysics(),
-        //   separatorBuilder: (context, index) => const SizedBox(width: 8),
-        //   itemBuilder: (context, index) {
-        //     return InkWell(
-        //       onTap: () => model.onTagTap(index),
-        //       child: DecoratedBox(
-        //         decoration: BoxDecoration(
-        //           color: tags[index].backgroundColor,
-        //           borderRadius: BorderRadius.circular(10),
-        //         ),
-        //         child: Padding(
-        //           padding: const EdgeInsets.symmetric(
-        //             horizontal: 16,
-        //             vertical: 10,
-        //           ),
-        //           child: Text(
-        //             tags[index].name,
-        //             textAlign: TextAlign.start,
-        //             style: TextStyle(
-        //               color: tags[index].titleColor,
-        //               fontWeight: FontWeight.w400,
-        //               fontSize: 14,
-        //               height: 1.05,
-        //             ),
-        //           ),
-        //         ),
-        //       ),
-        //     );
-        //   },
-        // ),
       ),
     );
   }
@@ -156,7 +135,7 @@ class _DishesGridWidget extends StatelessWidget {
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: 20, // dishCount,
+      itemCount: 21, // dishCount,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
         crossAxisSpacing: 8,

@@ -10,6 +10,7 @@ import 'package:shop_app_bloc/src/feature/location/data/api/geocoding_api_client
 import 'package:shop_app_bloc/src/feature/categories/widget/categories_screen.dart';
 import 'package:shop_app_bloc/src/feature/categories/bloc/categories_bloc.dart';
 import 'package:shop_app_bloc/src/feature/location/cubit/location_cubit.dart';
+import 'package:shop_app_bloc/src/feature/dishes/widget/dishes_screen.dart';
 import 'package:shop_app_bloc/src/feature/home/widget/home_screen.dart';
 import 'package:shop_app_bloc/src/feature/date/widget/date_scope.dart';
 import 'package:shop_app_bloc/src/common/network/network_client.dart';
@@ -103,12 +104,12 @@ final class _ScreenFactoryImpl implements IScreenFactory {
     );
   }
 
-  // @override
-  // Widget makeMainScreenGenerateRoute() {
-  //   return Navigator(
-  //     onGenerateRoute: diContainer._makeShopAppNavigation().onGenerateRoute,
-  //   );
-  // }
+  @override
+  Widget makeCategoriesScreenGenerateRoute() {
+    return Navigator(
+      onGenerateRoute: _diContainer._makeAppNavigation().onGenerateRoute,
+    );
+  }
 
   @override
   Widget makeCategoriesScreen() {
@@ -127,6 +128,11 @@ final class _ScreenFactoryImpl implements IScreenFactory {
   //     child: const CategoryScreenWidget(),
   //   );
   // }
+
+  @override
+  Widget makeDishesScreen() {
+    return const DishesScreen();
+  }
 
   // @override
   // Widget makeProductScreen(Dish dish) {
