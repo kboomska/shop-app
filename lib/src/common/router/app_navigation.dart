@@ -8,7 +8,7 @@ abstract interface class IScreenFactory {
   // Widget makeProductScreen(Dish dish);
   // Widget makeShoppingCartScreen();
   Widget makeCategoriesScreen();
-  Widget makeDishesScreen();
+  Widget makeDishesScreen(({int id, String title}) configuration);
   Widget makeHomeScreen();
 }
 
@@ -25,10 +25,9 @@ class AppNavigationImpl implements IAppNavigation {
   Route<Object> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case AppNavigationRouteNames.dishes:
-        // final configuration = settings.arguments as CategoryScreenConfiguration;
+        final configuration = settings.arguments as ({int id, String title});
         return MaterialPageRoute(
-          // builder: (_) => screenFactory.makeCategoryScreen(configuration),
-          builder: (_) => screenFactory.makeDishesScreen(),
+          builder: (_) => screenFactory.makeDishesScreen(configuration),
         );
       default:
         return MaterialPageRoute(

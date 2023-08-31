@@ -12,14 +12,14 @@ abstract class CategoriesScope {
     final bloc = context.read<CategoriesBloc>();
     final category = bloc.state.categories[index];
 
-    ({int id, String name}) configuration() => (
+    ({int id, String title}) configuration() => (
           id: category.id,
-          name: category.name,
+          title: category.name,
         );
 
     Navigator.of(context).pushNamed(
       AppNavigationRouteNames.dishes,
-      arguments: configuration,
+      arguments: configuration(),
     );
   }
 

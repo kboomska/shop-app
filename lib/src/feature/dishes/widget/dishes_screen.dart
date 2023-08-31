@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 import 'package:shop_app_bloc/src/common/theme/app_typography.dart';
@@ -5,7 +7,9 @@ import 'package:shop_app_bloc/src/common/resources/resources.dart';
 import 'package:shop_app_bloc/src/common/theme/app_colors.dart';
 
 class DishesScreen extends StatefulWidget {
-  const DishesScreen({super.key});
+  final ({int id, String title}) configuration;
+
+  const DishesScreen({super.key, required this.configuration});
 
   @override
   State<DishesScreen> createState() => _DishesScreenState();
@@ -20,10 +24,13 @@ class _DishesScreenState extends State<DishesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final (id: id, title: title) = widget.configuration;
+    log('Chosen category: $id - $title');
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const _DishesScreenTitle(),
+        title: _DishesScreenTitle(title: title),
         actions: const [_DishesScreenProfile()],
         iconTheme: const IconThemeData(color: AppColors.appBarIcon),
         elevation: 0,
@@ -40,14 +47,15 @@ class _DishesScreenState extends State<DishesScreen> {
 }
 
 class _DishesScreenTitle extends StatelessWidget {
-  const _DishesScreenTitle();
+  final String title;
+
+  const _DishesScreenTitle({required this.title});
 
   @override
   Widget build(BuildContext context) {
     // final model = context.read<CategoryScreenViewModel>();
-    return const Text(
-      // model.title,
-      'Категория блюд',
+    return Text(
+      title,
       overflow: TextOverflow.ellipsis,
       style: AppTypography.headline1,
     );

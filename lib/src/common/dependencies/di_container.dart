@@ -130,8 +130,8 @@ final class _ScreenFactoryImpl implements IScreenFactory {
   // }
 
   @override
-  Widget makeDishesScreen() {
-    return const DishesScreen();
+  Widget makeDishesScreen(({int id, String title}) configuration) {
+    return DishesScreen(configuration: configuration);
   }
 
   // @override
