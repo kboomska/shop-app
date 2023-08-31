@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:shop_app_bloc/src/common/router/app_navigation_route_names.dart';
+import 'package:shop_app_bloc/src/feature/categories/widget/categories_scope.dart';
 import 'package:shop_app_bloc/src/feature/categories/bloc/categories_state.dart';
-import 'package:shop_app_bloc/src/feature/categories/bloc/categories_bloc.dart';
 import 'package:shop_app_bloc/src/feature/location/widget/location_widget.dart';
 import 'package:shop_app_bloc/src/feature/date/widget/date_widget.dart';
 import 'package:shop_app_bloc/src/common/theme/app_typography.dart';
@@ -88,7 +85,7 @@ class _CategoriesScreenBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final state = context.watch<CategoriesBloc>().state;
+    final state = CategoriesScope.stateOf(context);
 
     return switch (state) {
       CategoriesState$Processing _ => const _CategoriesScreenProcessing(),
@@ -158,21 +155,7 @@ class _CategoryItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = context.read<CategoriesBloc>();
-    final category = bloc.state.categories[index];
-
-    void onCategoryTap(context) {
-      // final configuration = CategoryScreenConfiguration(
-      //   id: category.id,
-      //   name: category.name,
-      // );
-
-      Navigator.of(context).pushNamed(
-        AppNavigationRouteNames.dishes,
-        // MainNavigationRouteNames.category,
-        // arguments: configuration,
-      );
-    }
+    final category = CategoriesScope.getCategory(context, index: index);
 
     return Padding(
       padding: const EdgeInsets.only(left: 16, top: 8, right: 16),
@@ -184,7 +167,7 @@ class _CategoryItemWidget extends StatelessWidget {
         child: InkWell(
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
-          onTap: () => onCategoryTap(context),
+          onTap: () => CategoriesScope.moveToDishes(context, index: index),
           child: Stack(
             children: [
               Image.network(category.imageUrl),
