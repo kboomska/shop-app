@@ -155,7 +155,7 @@ class _CategoryItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final category = CategoriesScope.getCategory(context, index: index);
+    final category = CategoriesScope.categoryByIndex(context, index: index);
 
     return Padding(
       padding: const EdgeInsets.only(left: 16, top: 8, right: 16),
@@ -167,7 +167,7 @@ class _CategoryItemWidget extends StatelessWidget {
         child: InkWell(
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
-          onTap: () => CategoriesScope.moveToDishes(context, index: index),
+          onTap: () => CategoriesScope.onTapCategoryByIndex(context, index: index),
           child: Stack(
             children: [
               Image.network(category.imageUrl),

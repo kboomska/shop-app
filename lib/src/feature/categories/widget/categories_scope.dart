@@ -8,7 +8,7 @@ import 'package:shop_app_bloc/src/feature/categories/bloc/categories_bloc.dart';
 import 'package:shop_app_bloc/src/feature/categories/model/category.dart';
 
 abstract class CategoriesScope {
-  static void moveToDishes(BuildContext context, {required int index}) {
+  static void onTapCategoryByIndex(BuildContext context, {required int index}) {
     final bloc = context.read<CategoriesBloc>();
     final category = bloc.state.categories[index];
 
@@ -23,12 +23,14 @@ abstract class CategoriesScope {
     );
   }
 
-  static Category getCategory(BuildContext context, {required int index}) {
+  static Category categoryByIndex(BuildContext context, {required int index}) {
     final bloc = context.read<CategoriesBloc>();
     return bloc.state.categories[index];
   }
 
-  static CategoriesState stateOf(BuildContext context) {
-    return context.watch<CategoriesBloc>().state;
+  static CategoriesState stateOf(BuildContext context, {bool listen = true}) {
+    return listen
+        ? context.watch<CategoriesBloc>().state
+        : context.read<CategoriesBloc>().state;
   }
 }
