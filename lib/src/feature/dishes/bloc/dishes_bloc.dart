@@ -50,15 +50,17 @@ class DishesBloc extends Bloc<DishesEvent, DishesState> {
     if (state is DishesState$Processing) return;
 
     emit(DishesState.processing(dishes: state.dishes, tags: state.tags));
+    await Future.delayed(const Duration(milliseconds: 250));
 
     String? error;
     List<Dish>? dishes;
 
     try {
-      final categoriesResponse = await _dishesRepository
+      final dishesResponse = await _dishesRepository
           .getDishes()
           .timeout(const Duration(seconds: 3));
-      dishes = categoriesResponse.dishes;
+
+      dishes = dishesResponse.dishes;
     } on TimeoutException {
       error =
           'Превышено время ожидания ответа от сервера. Повторите попытку позднее';
@@ -88,6 +90,10 @@ class DishesBloc extends Bloc<DishesEvent, DishesState> {
     if (state is DishesState$Processing) return;
 
     final index = event.index;
+    final currentIndex = state.tags.indexWhere((tag) => tag.isSelected == true);
+
+    if (index == currentIndex) return;
+
     final List<DishTag> tags = [...state.tags];
 
     for (int i = 0; i < tags.length; i++) {
@@ -100,8 +106,6 @@ class DishesBloc extends Bloc<DishesEvent, DishesState> {
       dishes: state.dishes,
       tags: tags,
     ));
-
-    // add(DishesEvent$Load());
   }
 
   Future<void> _onDishesEvent$Reset(

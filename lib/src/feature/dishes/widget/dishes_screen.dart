@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:shop_app_bloc/src/feature/dishes/bloc/dishes_event.dart';
+import 'package:shop_app_bloc/src/feature/dishes/bloc/dishes_state.dart';
 import 'package:shop_app_bloc/src/feature/dishes/bloc/dishes_bloc.dart';
 import 'package:shop_app_bloc/src/common/theme/app_typography.dart';
 import 'package:shop_app_bloc/src/common/resources/resources.dart';
@@ -25,7 +26,7 @@ class DishesScreen extends StatelessWidget {
       body: ListView(
         children: const [
           _DishFilter(),
-          _DishesGridWidget(),
+          _DishesScreenBody(),
         ],
       ),
     );
@@ -115,13 +116,67 @@ class _DishFilter extends StatelessWidget {
   }
 }
 
-class _DishesGridWidget extends StatelessWidget {
-  const _DishesGridWidget();
+class _DishesScreenBody extends StatelessWidget {
+  const _DishesScreenBody();
 
   @override
   Widget build(BuildContext context) {
     final state = context.watch<DishesBloc>().state;
-    final dishCount = state.dishes.length;
+
+    return switch (state) {
+      DishesState$Processing _ => const _DishesScreenProcessing(),
+      DishesState$Idle _ => state.hasError
+          ? _DishesScreenError(state: state)
+          : _DishesGridWidget(state: state),
+    };
+  }
+}
+
+class _DishesScreenProcessing extends StatelessWidget {
+  const _DishesScreenProcessing();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: CircularProgressIndicator(
+        color: AppColors.buttonBackground,
+      ),
+    );
+  }
+}
+
+class _DishesScreenError extends StatelessWidget {
+  final DishesState state;
+
+  const _DishesScreenError({required this.state});
+
+  @override
+  Widget build(BuildContext context) {
+    final errorMessage = state.error;
+
+    if (errorMessage == null) return const SizedBox.shrink();
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Text(
+          errorMessage,
+          style: AppTypography.subhead1,
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  }
+}
+
+class _DishesGridWidget extends StatelessWidget {
+  final DishesState state;
+
+  const _DishesGridWidget({required this.state});
+
+  @override
+  Widget build(BuildContext context) {
+    final state = context.watch<DishesBloc>().state;
+    final dishCount = state.filteredDishes.length;
     final size = MediaQuery.of(context).size;
     final double itemWidth = (size.width / 3) - 16;
 
@@ -153,7 +208,7 @@ class _DishItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<DishesBloc>();
-    final dish = bloc.state.dishes[index];
+    final dish = bloc.state.filteredDishes[index];
 
     return Container(
       decoration: BoxDecoration(

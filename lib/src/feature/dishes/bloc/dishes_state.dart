@@ -66,6 +66,11 @@ abstract base class _$DishesStateBase {
   });
 
   bool get hasError => error != null;
+  List<Dish> get filteredDishes {
+    final dishTag = tags.singleWhere((tag) => tag.isSelected == true).name;
+
+    return dishes.where((dish) => dish.tegs.contains(dishTag)).toList();
+  }
 
   @override
   bool operator ==(Object other) {
