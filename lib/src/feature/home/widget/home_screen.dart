@@ -56,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: IndexedStack(
         index: _selectedTab,
         children: [
-          widget.screenFactory.makeCategoriesScreen(),
+          widget.screenFactory.makeCategoriesScreenGenerateRoute(),
           Center(
             child: Text(_bottomNavigationBarOptions[1]),
           ),
