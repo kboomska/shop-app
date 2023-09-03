@@ -109,8 +109,10 @@ final class _DIContainer {
       );
 
   /// Create [DishesBloc]
-  DishesBloc _makeDishesBloc() => DishesBloc(
+  DishesBloc _makeDishesBloc(({int id, String title}) configuration) =>
+      DishesBloc(
         dishesRepository: _makeDishesRepository(),
+        configuration: configuration,
       );
 
   /// Create [LocationCubit]
@@ -157,8 +159,8 @@ final class _ScreenFactoryImpl implements IScreenFactory {
   @override
   Widget makeDishesScreen(({int id, String title}) configuration) {
     return BlocProvider(
-      create: (_) => _diContainer._makeDishesBloc(),
-      child: DishesScreen(configuration: configuration),
+      create: (_) => _diContainer._makeDishesBloc(configuration),
+      child: const DishesScreen(),
     );
   }
 

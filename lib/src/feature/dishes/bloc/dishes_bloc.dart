@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:async';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
@@ -10,12 +11,15 @@ import 'package:shop_app_bloc/src/feature/dishes/bloc/dishes_state.dart';
 import 'package:shop_app_bloc/src/feature/dishes/model/dish.dart';
 
 class DishesBloc extends Bloc<DishesEvent, DishesState> {
+  final ({int id, String title}) _configuration;
   final IDishesRepository _dishesRepository;
 
   DishesBloc({
+    required ({int id, String title}) configuration,
     required IDishesRepository dishesRepository,
     DishesState? initialState,
-  })  : _dishesRepository = dishesRepository,
+  })  : _configuration = configuration,
+        _dishesRepository = dishesRepository,
         super(initialState ?? DishesState.initialState) {
     on<DishesEvent>(
       (event, emit) async {
@@ -34,8 +38,12 @@ class DishesBloc extends Bloc<DishesEvent, DishesState> {
       transformer: sequential(),
     );
 
+    log('Chosen category: ${_configuration.id} - ${_configuration.title}');
+
     add(DishesEvent$Load());
   }
+
+  String get title => _configuration.title;
 
   Future<void> _onDishesEvent$Load(
     DishesEvent$Load event,

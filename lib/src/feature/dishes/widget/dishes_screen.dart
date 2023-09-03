@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,9 +8,7 @@ import 'package:shop_app_bloc/src/common/resources/resources.dart';
 import 'package:shop_app_bloc/src/common/theme/app_colors.dart';
 
 class DishesScreen extends StatefulWidget {
-  final ({int id, String title}) configuration;
-
-  const DishesScreen({super.key, required this.configuration});
+  const DishesScreen({super.key});
 
   @override
   State<DishesScreen> createState() => _DishesScreenState();
@@ -27,13 +23,10 @@ class _DishesScreenState extends State<DishesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final (id: id, title: title) = widget.configuration;
-    log('Chosen category: $id - $title');
-
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: _DishesScreenTitle(title: title),
+        title: const _DishesScreenTitle(),
         actions: const [_DishesScreenProfile()],
         iconTheme: const IconThemeData(color: AppColors.appBarIcon),
         elevation: 0,
@@ -50,13 +43,12 @@ class _DishesScreenState extends State<DishesScreen> {
 }
 
 class _DishesScreenTitle extends StatelessWidget {
-  final String title;
-
-  const _DishesScreenTitle({required this.title});
+  const _DishesScreenTitle();
 
   @override
   Widget build(BuildContext context) {
-    // final model = context.read<CategoryScreenViewModel>();
+    final title = context.read<DishesBloc>().title;
+
     return Text(
       title,
       overflow: TextOverflow.ellipsis,
