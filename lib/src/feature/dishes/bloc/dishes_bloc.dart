@@ -51,7 +51,7 @@ class DishesBloc extends Bloc<DishesEvent, DishesState> {
   ) async {
     if (state is DishesState$Processing) return;
 
-    emit(DishesState.processing(dishes: state.dishes));
+    emit(DishesState.processing(dishes: state.dishes, tags: state.tags));
 
     String? error;
     List<Dish>? dishes;
@@ -77,6 +77,7 @@ class DishesBloc extends Bloc<DishesEvent, DishesState> {
     } finally {
       emit(DishesState.idle(
         dishes: dishes ?? state.dishes,
+        tags: state.tags,
         error: error,
       ));
     }
