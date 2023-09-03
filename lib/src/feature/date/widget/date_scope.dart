@@ -75,7 +75,7 @@ class _DateScopeState extends State<DateScope> {
         '${_dateFormat.format(now)}, ${_yearFormat.format(now)}';
 
     setState(() {
-      log('DateScope: Locale changed from $_localeTag to: $localeTag');
+      log('DateScope: Locale changed from "$_localeTag" to: "$localeTag"');
       _date = date;
       _localeTag = localeTag;
     });
