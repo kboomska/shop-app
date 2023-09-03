@@ -2,24 +2,14 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:shop_app_bloc/src/feature/dishes/bloc/dishes_event.dart';
 import 'package:shop_app_bloc/src/feature/dishes/bloc/dishes_bloc.dart';
 import 'package:shop_app_bloc/src/common/theme/app_typography.dart';
 import 'package:shop_app_bloc/src/common/resources/resources.dart';
 import 'package:shop_app_bloc/src/common/theme/app_colors.dart';
 
-class DishesScreen extends StatefulWidget {
+class DishesScreen extends StatelessWidget {
   const DishesScreen({super.key});
-
-  @override
-  State<DishesScreen> createState() => _DishesScreenState();
-}
-
-class _DishesScreenState extends State<DishesScreen> {
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   context.read<CategoryScreenViewModel>().setDishTag();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -77,8 +67,10 @@ class _DishFilter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final model = context.read<CategoryScreenViewModel>();
-    // final tags = context.select((CategoryScreenViewModel model) => model.tags);
+    final bloc = context.read<DishesBloc>();
+    final tags = context.select(
+      (DishesBloc bloc) => bloc.state.tags,
+    );
 
     return Padding(
       padding: const EdgeInsets.symmetric(
@@ -89,17 +81,16 @@ class _DishFilter extends StatelessWidget {
         height: 35,
         child: ListView.separated(
           shrinkWrap: true,
-          itemCount: 4, //tags.length,
+          itemCount: tags.length,
           scrollDirection: Axis.horizontal,
           physics: const BouncingScrollPhysics(),
           separatorBuilder: (context, index) => const SizedBox(width: 8),
           itemBuilder: (context, index) {
             return InkWell(
-              // onTap: () => model.onTagTap(index),
+              onTap: () => bloc.add(DishesEvent$OnTapTag(index: index)),
               child: DecoratedBox(
                 decoration: BoxDecoration(
-                  color: AppColors
-                      .dishTagBackgroundSelected, // tags[index].backgroundColor,
+                  color: tags[index].backgroundColor,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Padding(
@@ -108,10 +99,10 @@ class _DishFilter extends StatelessWidget {
                     vertical: 10,
                   ),
                   child: Text(
-                    'Тэг блюда', // tags[index].name,
+                    tags[index].name,
                     textAlign: TextAlign.start,
                     style: AppTypography.headlineDishTag(
-                      AppColors.dishTagTextSelected, // tags[index].titleColor,
+                      tags[index].titleColor,
                     ),
                   ),
                 ),

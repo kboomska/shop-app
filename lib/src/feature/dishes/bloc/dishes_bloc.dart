@@ -8,6 +8,7 @@ import 'package:shop_app_bloc/src/feature/dishes/data/repository/dishes_reposito
 import 'package:shop_app_bloc/src/common/network/network_client_exception.dart';
 import 'package:shop_app_bloc/src/feature/dishes/bloc/dishes_event.dart';
 import 'package:shop_app_bloc/src/feature/dishes/bloc/dishes_state.dart';
+import 'package:shop_app_bloc/src/feature/dishes/model/dish_tag.dart';
 import 'package:shop_app_bloc/src/feature/dishes/model/dish.dart';
 
 class DishesBloc extends Bloc<DishesEvent, DishesState> {
@@ -28,12 +29,9 @@ class DishesBloc extends Bloc<DishesEvent, DishesState> {
             await _onDishesEvent$Load(event, emit);
           case DishesEvent$Reset _:
             await _onDishesEvent$Reset(event, emit);
+          case DishesEvent$OnTapTag _:
+            await _onDishesEvent$OnTapTag(event, emit);
         }
-        // if (event is DishesEvent$Load) {
-        //   await _onDishesEvent$Load(event, emit);
-        // } else if (event is DishesEvent$Reset) {
-        //   await _onDishesEvent$Reset(event, emit);
-        // }
       },
       transformer: sequential(),
     );
@@ -81,6 +79,29 @@ class DishesBloc extends Bloc<DishesEvent, DishesState> {
         error: error,
       ));
     }
+  }
+
+  Future<void> _onDishesEvent$OnTapTag(
+    DishesEvent$OnTapTag event,
+    Emitter<DishesState> emit,
+  ) async {
+    if (state is DishesState$Processing) return;
+
+    final index = event.index;
+    final List<DishTag> tags = [...state.tags];
+
+    for (int i = 0; i < tags.length; i++) {
+      tags[i] = tags[i].copyWith(isSelected: i == index);
+    }
+
+    log('Chosen tag: ${tags[index].name}');
+
+    emit(DishesState.idle(
+      dishes: state.dishes,
+      tags: tags,
+    ));
+
+    // add(DishesEvent$Load());
   }
 
   Future<void> _onDishesEvent$Reset(
