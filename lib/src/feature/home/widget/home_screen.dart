@@ -75,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
 Widget bottomNavigationBarHandler({
   required int index,
   required List<String> labelList,
-  required Function(int) onSelectTab,
+  required void Function(int) onSelectTab,
 }) {
   return Container(
     height: 69,

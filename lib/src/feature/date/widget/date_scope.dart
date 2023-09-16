@@ -51,7 +51,7 @@ class _DateScopeState extends State<DateScope> {
     log('DateScope: Disposed');
   }
 
-  _onDateChanged() {
+  void _onDateChanged() {
     final now = DateTime.now();
     final String date =
         '${_dateFormat.format(now)}, ${_yearFormat.format(now)}';
