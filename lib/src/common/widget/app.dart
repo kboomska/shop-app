@@ -44,6 +44,10 @@ class App extends StatelessWidget {
       ],
       routes: navigation.routes,
       initialRoute: AppNavigationRouteNames.home,
+      builder: (context, child) => MediaQuery(
+        data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
+        child: child ?? const SizedBox.shrink(),
+      ),
     );
   }
 }

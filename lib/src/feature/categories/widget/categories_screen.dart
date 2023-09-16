@@ -85,8 +85,8 @@ class _CategoriesScreenBody extends StatelessWidget {
     return switch (state) {
       CategoriesState$Processing _ => const _CategoriesScreenProcessing(),
       CategoriesState$Idle _ => state.hasError
-          ? _CategoriesScreenError(state: state)
-          : _CategoryListWidget(state: state),
+          ? _CategoriesScreenError(error: state.error)
+          : _CategoryListWidget(categoryCount: state.categories.length),
     };
   }
 }
@@ -105,20 +105,17 @@ class _CategoriesScreenProcessing extends StatelessWidget {
 }
 
 class _CategoriesScreenError extends StatelessWidget {
-  final CategoriesState state;
+  final String error;
 
-  const _CategoriesScreenError({required this.state});
+  const _CategoriesScreenError({required this.error});
 
   @override
   Widget build(BuildContext context) {
-    final errorMessage = state.error;
-
-    if (errorMessage == null) return const SizedBox.shrink();
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Text(
-          errorMessage,
+          error,
           style: AppTypography.subhead1,
           textAlign: TextAlign.center,
         ),
@@ -128,14 +125,12 @@ class _CategoriesScreenError extends StatelessWidget {
 }
 
 class _CategoryListWidget extends StatelessWidget {
-  final CategoriesState state;
+  final int categoryCount;
 
-  const _CategoryListWidget({required this.state});
+  const _CategoryListWidget({required this.categoryCount});
 
   @override
   Widget build(BuildContext context) {
-    final categoryCount = state.categories.length;
-
     return ListView.builder(
       itemCount: categoryCount,
       itemBuilder: (context, index) => _CategoryItemWidget(index: index),
@@ -162,7 +157,8 @@ class _CategoryItemWidget extends StatelessWidget {
         child: InkWell(
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
-          onTap: () => CategoriesScope.onTapCategoryByIndex(context, index: index),
+          onTap: () =>
+              CategoriesScope.onTapCategoryByIndex(context, index: index),
           child: Stack(
             children: [
               Image.network(category.imageUrl),

@@ -29,7 +29,7 @@ sealed class DishesState extends _$DishesStateBase {
       DishTag(name: 'С рисом', isSelected: false),
       DishTag(name: 'С рыбой', isSelected: false),
     ],
-    error: null,
+    error: '',
   );
 }
 
@@ -37,11 +37,11 @@ final class DishesState$Idle extends DishesState {
   const DishesState$Idle({
     required super.dishes,
     required super.tags,
-    this.error,
-  });
+    String? error,
+  }) : error = error ?? '';
 
   @override
-  final String? error;
+  final String error;
 }
 
 final class DishesState$Processing extends DishesState {
@@ -51,21 +51,21 @@ final class DishesState$Processing extends DishesState {
   });
 
   @override
-  String? get error => null;
+  String get error => '';
 }
 
 @immutable
 abstract base class _$DishesStateBase {
   final List<Dish> dishes;
   final List<DishTag> tags;
-  abstract final String? error;
+  abstract final String error;
 
   const _$DishesStateBase({
     required this.dishes,
     required this.tags,
   });
 
-  bool get hasError => error != null;
+  bool get hasError => error.isNotEmpty;
   List<Dish> get filteredDishes {
     final dishTag = tags.singleWhere((tag) => tag.isSelected == true).name;
 

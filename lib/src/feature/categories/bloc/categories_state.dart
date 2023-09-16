@@ -17,34 +17,37 @@ sealed class CategoriesState extends _$CategoriesStateBase {
 
   static const CategoriesState initialState = CategoriesState.idle(
     categories: <Category>[],
-    error: null,
+    error: '',
   );
 }
 
 final class CategoriesState$Idle extends CategoriesState {
-  const CategoriesState$Idle({required super.categories, this.error});
+  const CategoriesState$Idle({
+    required super.categories,
+    String? error,
+  }) : error = error ?? '';
 
   @override
-  final String? error;
+  final String error;
 }
 
 final class CategoriesState$Processing extends CategoriesState {
   const CategoriesState$Processing({required super.categories});
 
   @override
-  String? get error => null;
+  String get error => '';
 }
 
 @immutable
 abstract base class _$CategoriesStateBase {
   final List<Category> categories;
-  abstract final String? error;
+  abstract final String error;
 
   const _$CategoriesStateBase({
     required this.categories,
   });
 
-  bool get hasError => error != null;
+  bool get hasError => error.isNotEmpty;
 
   @override
   bool operator ==(Object other) {

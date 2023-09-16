@@ -23,12 +23,7 @@ class DishesScreen extends StatelessWidget {
         elevation: 0,
       ),
       backgroundColor: AppColors.appBackground,
-      body: ListView(
-        children: const [
-          _DishFilter(),
-          _DishesScreenBody(),
-        ],
-      ),
+      body: const _DishesScreenBody(),
     );
   }
 }
@@ -63,8 +58,71 @@ class _DishesScreenProfile extends StatelessWidget {
   }
 }
 
-class _DishFilter extends StatelessWidget {
-  const _DishFilter();
+class _DishesScreenBody extends StatelessWidget {
+  const _DishesScreenBody();
+
+  @override
+  Widget build(BuildContext context) {
+    final state = context.watch<DishesBloc>().state;
+
+    return switch (state) {
+      DishesState$Processing _ => const _DishesScreenProcessing(),
+      DishesState$Idle _ => state.hasError
+          ? _DishesScreenError(error: state.error)
+          : const _DishesWidget(),
+    };
+  }
+}
+
+class _DishesScreenProcessing extends StatelessWidget {
+  const _DishesScreenProcessing();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: CircularProgressIndicator(
+        color: AppColors.buttonBackground,
+      ),
+    );
+  }
+}
+
+class _DishesScreenError extends StatelessWidget {
+  final String error;
+
+  const _DishesScreenError({required this.error});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Text(
+          error,
+          style: AppTypography.subhead1,
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  }
+}
+
+class _DishesWidget extends StatelessWidget {
+  const _DishesWidget();
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: const [
+        _DishFilterWidget(),
+        _DishesGridWidget(),
+      ],
+    );
+  }
+}
+
+class _DishFilterWidget extends StatelessWidget {
+  const _DishFilterWidget();
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +139,6 @@ class _DishFilter extends StatelessWidget {
       child: SizedBox(
         height: 35,
         child: ListView.separated(
-          shrinkWrap: true,
           itemCount: tags.length,
           scrollDirection: Axis.horizontal,
           physics: const BouncingScrollPhysics(),
@@ -116,62 +173,8 @@ class _DishFilter extends StatelessWidget {
   }
 }
 
-class _DishesScreenBody extends StatelessWidget {
-  const _DishesScreenBody();
-
-  @override
-  Widget build(BuildContext context) {
-    final state = context.watch<DishesBloc>().state;
-
-    return switch (state) {
-      DishesState$Processing _ => const _DishesScreenProcessing(),
-      DishesState$Idle _ => state.hasError
-          ? _DishesScreenError(state: state)
-          : _DishesGridWidget(state: state),
-    };
-  }
-}
-
-class _DishesScreenProcessing extends StatelessWidget {
-  const _DishesScreenProcessing();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: CircularProgressIndicator(
-        color: AppColors.buttonBackground,
-      ),
-    );
-  }
-}
-
-class _DishesScreenError extends StatelessWidget {
-  final DishesState state;
-
-  const _DishesScreenError({required this.state});
-
-  @override
-  Widget build(BuildContext context) {
-    final errorMessage = state.error;
-
-    if (errorMessage == null) return const SizedBox.shrink();
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Text(
-          errorMessage,
-          style: AppTypography.subhead1,
-          textAlign: TextAlign.center,
-        ),
-      ),
-    );
-  }
-}
-
 class _DishesGridWidget extends StatelessWidget {
-  final DishesState state;
-
-  const _DishesGridWidget({required this.state});
+  const _DishesGridWidget();
 
   @override
   Widget build(BuildContext context) {
