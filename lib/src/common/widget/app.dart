@@ -6,7 +6,6 @@ import 'package:shop_app_bloc/src/common/router/app_navigation_route_names.dart'
 import 'package:shop_app_bloc/src/common/theme/app_colors.dart';
 
 abstract interface class IAppNavigation {
-  Route<Object> onGenerateRoute(RouteSettings settings);
   Map<String, Widget Function(BuildContext)> get routes;
 }
 

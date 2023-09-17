@@ -3,14 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:shop_app_bloc/src/feature/location/cubit/location_cubit.dart';
-import 'package:shop_app_bloc/src/common/router/app_navigation.dart';
 import 'package:shop_app_bloc/src/common/resources/resources.dart';
 import 'package:shop_app_bloc/src/common/theme/app_colors.dart';
 
-class HomeScreen extends StatefulWidget {
-  final IScreenFactory screenFactory;
+abstract interface class ICategoriesNavigation {
+  Widget categoriesScreenNavigator();
+}
 
-  const HomeScreen({super.key, required this.screenFactory});
+class HomeScreen extends StatefulWidget {
+  final ICategoriesNavigation navigation;
+
+  const HomeScreen({super.key, required this.navigation});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -56,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: IndexedStack(
         index: _selectedTab,
         children: [
-          widget.screenFactory.makeCategoriesScreenGenerateRoute(),
+          widget.navigation.categoriesScreenNavigator(),
           Center(
             child: Text(_bottomNavigationBarOptions[1]),
           ),
