@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:shop_app_bloc/src/common/widget/cached_image_widget.dart';
 import 'package:shop_app_bloc/src/feature/dishes/bloc/dishes_event.dart';
 import 'package:shop_app_bloc/src/feature/dishes/bloc/dishes_state.dart';
 import 'package:shop_app_bloc/src/feature/dishes/bloc/dishes_bloc.dart';
@@ -235,9 +236,8 @@ class _DishItemWidget extends StatelessWidget {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(10),
-                  child: Image.network(
-                    dish.imageUrl,
-                    fit: BoxFit.contain,
+                  child: CachedImageWidget(
+                    imageUrl: dish.imageUrl,
                   ),
                 ),
               ),
