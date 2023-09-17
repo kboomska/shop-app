@@ -112,8 +112,8 @@ class _DishesWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: const [
+    return const CustomScrollView(
+      slivers: [
         _DishFilterWidget(),
         _DishesGridWidget(),
       ],
@@ -131,42 +131,44 @@ class _DishFilterWidget extends StatelessWidget {
       (DishesBloc bloc) => bloc.state.tags,
     );
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 8,
-      ),
-      child: SizedBox(
-        height: 35,
-        child: ListView.separated(
-          itemCount: tags.length,
-          scrollDirection: Axis.horizontal,
-          physics: const BouncingScrollPhysics(),
-          separatorBuilder: (context, index) => const SizedBox(width: 8),
-          itemBuilder: (context, index) {
-            return InkWell(
-              onTap: () => bloc.add(DishesEvent$OnTapTag(index: index)),
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: tags[index].backgroundColor,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 10,
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 8,
+        ),
+        child: SizedBox(
+          height: 35,
+          child: ListView.separated(
+            itemCount: tags.length,
+            scrollDirection: Axis.horizontal,
+            physics: const BouncingScrollPhysics(),
+            separatorBuilder: (context, index) => const SizedBox(width: 8),
+            itemBuilder: (context, index) {
+              return InkWell(
+                onTap: () => bloc.add(DishesEvent$OnTapTag(index: index)),
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: tags[index].backgroundColor,
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  child: Text(
-                    tags[index].name,
-                    textAlign: TextAlign.start,
-                    style: AppTypography.headlineDishTag(
-                      tags[index].titleColor,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 10,
+                    ),
+                    child: Text(
+                      tags[index].name,
+                      textAlign: TextAlign.start,
+                      style: AppTypography.headlineDishTag(
+                        tags[index].titleColor,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );
@@ -183,20 +185,20 @@ class _DishesGridWidget extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     final double itemWidth = (size.width / 3) - 16;
 
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: dishCount,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        crossAxisSpacing: 8,
-        mainAxisSpacing: 14,
-        mainAxisExtent: itemWidth + 40,
-      ),
+    return SliverPadding(
       padding: const EdgeInsets.only(left: 16, top: 8, right: 16),
-      itemBuilder: (context, index) => _DishItemWidget(
-        index: index,
-        itemWidth: itemWidth,
+      sliver: SliverGrid.builder(
+        itemCount: dishCount,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          crossAxisSpacing: 8,
+          mainAxisSpacing: 14,
+          mainAxisExtent: itemWidth + 40,
+        ),
+        itemBuilder: (context, index) => _DishItemWidget(
+          index: index,
+          itemWidth: itemWidth,
+        ),
       ),
     );
   }
