@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
+import 'package:shop_app_bloc/src/common/router/app_navigation_route_names.dart';
 import 'package:shop_app_bloc/src/feature/location/cubit/location_cubit.dart';
 import 'package:shop_app_bloc/src/common/resources/resources.dart';
 import 'package:shop_app_bloc/src/common/theme/app_colors.dart';
@@ -11,17 +13,15 @@ abstract interface class ICategoriesNavigation {
 }
 
 class HomeScreen extends StatefulWidget {
-  final ICategoriesNavigation navigation;
+  final Widget child;
 
-  const HomeScreen({super.key, required this.navigation});
+  const HomeScreen({super.key, required this.child});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedTab = 0;
-
   static const List<String> _bottomNavigationBarOptions = [
     'Главная',
     'Поиск',
@@ -40,11 +40,43 @@ class _HomeScreenState extends State<HomeScreen> {
     return '${locale.languageCode}_${locale.countryCode}';
   }
 
-  void onSelectTab(int index) {
-    if (_selectedTab == index) return;
-    setState(() {
-      _selectedTab = index;
-    });
+  int _selectedTab(BuildContext context) {
+    final String route = GoRouterState.of(context).uri.toString();
+    if (route.startsWith(AppNavigationRoutes.categories)) {
+      return 0;
+    }
+    if (route.startsWith(AppNavigationRoutes.search)) {
+      return 1;
+    }
+    if (route.startsWith(AppNavigationRoutes.cart)) {
+      return 2;
+    }
+    if (route.startsWith(AppNavigationRoutes.profile)) {
+      return 3;
+    }
+    return 0;
+  }
+
+  void _onSelectTab(int index, BuildContext context) {
+    switch (index) {
+      case 0:
+        context.go(AppNavigationRoutes.categories);
+      case 1:
+        context.go(
+          AppNavigationRoutes.search,
+          extra: _bottomNavigationBarOptions[1],
+        );
+      case 2:
+        context.go(
+          AppNavigationRoutes.cart,
+          extra: _bottomNavigationBarOptions[2],
+        );
+      case 3:
+        context.go(
+          AppNavigationRoutes.profile,
+          extra: _bottomNavigationBarOptions[3],
+        );
+    }
   }
 
   @override
@@ -52,25 +84,11 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: AppColors.appBackground,
       bottomNavigationBar: bottomNavigationBarHandler(
-        index: _selectedTab,
+        index: _selectedTab(context),
         labelList: _bottomNavigationBarOptions,
-        onSelectTab: onSelectTab,
+        onSelectTab: (index) => _onSelectTab(index, context),
       ),
-      body: IndexedStack(
-        index: _selectedTab,
-        children: [
-          widget.navigation.categoriesScreenNavigator(),
-          Center(
-            child: Text(_bottomNavigationBarOptions[1]),
-          ),
-          Center(
-            child: Text(_bottomNavigationBarOptions[2]),
-          ),
-          Center(
-            child: Text(_bottomNavigationBarOptions[3]),
-          ),
-        ],
-      ),
+      body: widget.child,
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:shop_app_bloc/src/common/router/app_navigation_route_names.dart';
 import 'package:shop_app_bloc/src/feature/categories/bloc/categories_state.dart';
@@ -17,9 +18,9 @@ abstract class CategoriesScope {
           title: category.name,
         );
 
-    Navigator.of(context).pushNamed(
-      AppNavigationRouteNames.dishes,
-      arguments: configuration(),
+    context.go(
+      AppNavigationRoutes.dishes,
+      extra: configuration(),
     );
   }
 
