@@ -6,14 +6,18 @@ import 'package:shop_app_bloc/src/feature/location/cubit/location_cubit.dart';
 import 'package:shop_app_bloc/src/common/resources/resources.dart';
 import 'package:shop_app_bloc/src/common/theme/app_colors.dart';
 
-abstract interface class ICategoriesNavigation {
+abstract interface class IHomeNestedNavigation {
+  Widget dummyScreenNavigator(String name);
   Widget categoriesScreenNavigator();
 }
 
 class HomeScreen extends StatefulWidget {
-  final ICategoriesNavigation navigation;
+  final IHomeNestedNavigation navigation;
 
-  const HomeScreen({super.key, required this.navigation});
+  const HomeScreen({
+    required this.navigation,
+    super.key,
+  });
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -40,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return '${locale.languageCode}_${locale.countryCode}';
   }
 
-  void onSelectTab(int index) {
+  void _onSelectTab(int index) {
     if (_selectedTab == index) return;
     setState(() {
       _selectedTab = index;
@@ -50,24 +54,23 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.appBackground,
       bottomNavigationBar: bottomNavigationBarHandler(
         index: _selectedTab,
         labelList: _bottomNavigationBarOptions,
-        onSelectTab: onSelectTab,
+        onSelectTab: _onSelectTab,
       ),
       body: IndexedStack(
         index: _selectedTab,
         children: [
           widget.navigation.categoriesScreenNavigator(),
-          Center(
-            child: Text(_bottomNavigationBarOptions[1]),
+          widget.navigation.dummyScreenNavigator(
+            _bottomNavigationBarOptions[1],
           ),
-          Center(
-            child: Text(_bottomNavigationBarOptions[2]),
+          widget.navigation.dummyScreenNavigator(
+            _bottomNavigationBarOptions[2],
           ),
-          Center(
-            child: Text(_bottomNavigationBarOptions[3]),
+          widget.navigation.dummyScreenNavigator(
+            _bottomNavigationBarOptions[3],
           ),
         ],
       ),
