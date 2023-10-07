@@ -50,7 +50,6 @@ class DishesBloc extends Bloc<DishesEvent, DishesState> {
     if (state is DishesState$Processing) return;
 
     emit(DishesState.processing(dishes: state.dishes, tags: state.tags));
-    await Future<void>.delayed(const Duration(milliseconds: 250));
 
     String? error;
     List<Dish>? dishes;

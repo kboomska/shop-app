@@ -12,7 +12,7 @@ import 'package:shop_app_bloc/src/feature/location/data/api/geocoding_api_client
 import 'package:shop_app_bloc/src/feature/categories/widget/categories_screen.dart';
 import 'package:shop_app_bloc/src/feature/categories/bloc/categories_bloc.dart';
 import 'package:shop_app_bloc/src/feature/location/cubit/location_cubit.dart';
-import 'package:shop_app_bloc/src/common/router/categories_navigation.dart';
+import 'package:shop_app_bloc/src/common/router/home_nested_navigation.dart';
 import 'package:shop_app_bloc/src/feature/dishes/widget/dishes_screen.dart';
 import 'package:shop_app_bloc/src/feature/dishes/bloc/dishes_bloc.dart';
 import 'package:shop_app_bloc/src/feature/home/widget/home_screen.dart';
@@ -52,8 +52,8 @@ final class _DIContainer {
         screenFactory: _makeScreenFactory(),
       );
 
-  /// Create [CategoriesNavigationImpl]
-  ICategoriesNavigation _makeCategoriesNavigation() => CategoriesNavigationImpl(
+  /// Create [HomeNestedNavigationImpl]
+  IHomeNestedNavigation _makeHomeNestedNavigation() => HomeNestedNavigationImpl(
         screenFactory: _makeScreenFactory(),
       );
 
@@ -140,7 +140,7 @@ final class _ScreenFactoryImpl implements IScreenFactory {
       create: (_) => _diContainer._makeLocationCubit(),
       child: DateScope(
         child: HomeScreen(
-          navigation: _diContainer._makeCategoriesNavigation(),
+          navigation: _diContainer._makeHomeNestedNavigation(),
         ),
       ),
     );
@@ -161,6 +161,14 @@ final class _ScreenFactoryImpl implements IScreenFactory {
     return BlocProvider(
       create: (_) => _diContainer._makeDishesBloc(configuration),
       child: const DishesScreen(),
+    );
+  }
+
+  /// Create Dummy Screen
+  @override
+  Widget makeDummyScreen(String name) {
+    return Center(
+      child: Text(name),
     );
   }
 

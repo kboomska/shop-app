@@ -7,6 +7,7 @@ abstract interface class IScreenFactory {
   // Widget makeProductScreen(Dish dish);
   // Widget makeShoppingCartScreen();
   Widget makeDishesScreen(({int id, String title}) configuration);
+  Widget makeDummyScreen(String name);
   Widget makeCategoriesScreen();
   Widget makeHomeScreen();
 }

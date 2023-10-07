@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:shop_app_bloc/src/feature/dishes/widget/dishes_processing_screen.dart';
+import 'package:shop_app_bloc/src/common/widget/cached_image_widget.dart';
 import 'package:shop_app_bloc/src/feature/dishes/bloc/dishes_event.dart';
 import 'package:shop_app_bloc/src/feature/dishes/bloc/dishes_state.dart';
 import 'package:shop_app_bloc/src/feature/dishes/bloc/dishes_bloc.dart';
@@ -66,24 +68,11 @@ class _DishesScreenBody extends StatelessWidget {
     final state = context.watch<DishesBloc>().state;
 
     return switch (state) {
-      DishesState$Processing _ => const _DishesScreenProcessing(),
+      DishesState$Processing _ => const DishesScreenProcessing(),
       DishesState$Idle _ => state.hasError
           ? _DishesScreenError(error: state.error)
-          : const _DishesWidget(),
+          : const _DishesScreenWidget(),
     };
-  }
-}
-
-class _DishesScreenProcessing extends StatelessWidget {
-  const _DishesScreenProcessing();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: CircularProgressIndicator(
-        color: AppColors.buttonBackground,
-      ),
-    );
   }
 }
 
@@ -107,8 +96,8 @@ class _DishesScreenError extends StatelessWidget {
   }
 }
 
-class _DishesWidget extends StatelessWidget {
-  const _DishesWidget();
+class _DishesScreenWidget extends StatelessWidget {
+  const _DishesScreenWidget();
 
   @override
   Widget build(BuildContext context) {
@@ -235,9 +224,8 @@ class _DishItemWidget extends StatelessWidget {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(10),
-                  child: Image.network(
-                    dish.imageUrl,
-                    fit: BoxFit.contain,
+                  child: CachedImageWidget(
+                    imageUrl: dish.imageUrl,
                   ),
                 ),
               ),
