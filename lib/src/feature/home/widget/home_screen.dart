@@ -22,6 +22,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  int selectedTab = 0;
+
   static const List<String> _bottomNavigationBarOptions = [
     'Главная',
     'Поиск',
@@ -40,41 +42,26 @@ class _HomeScreenState extends State<HomeScreen> {
     return '${locale.languageCode}_${locale.countryCode}';
   }
 
-  int _selectedTab(BuildContext context) {
-    final String route = GoRouterState.of(context).uri.toString();
-    if (route.startsWith(AppNavigationRoutes.categories)) {
-      return 0;
-    }
-    if (route.startsWith(AppNavigationRoutes.search)) {
-      return 1;
-    }
-    if (route.startsWith(AppNavigationRoutes.cart)) {
-      return 2;
-    }
-    if (route.startsWith(AppNavigationRoutes.profile)) {
-      return 3;
-    }
-    return 0;
-  }
-
   void _onSelectTab(int index, BuildContext context) {
+    selectedTab = index;
+
     switch (index) {
       case 0:
         context.go(AppNavigationRoutes.categories);
       case 1:
         context.go(
           AppNavigationRoutes.search,
-          extra: _bottomNavigationBarOptions[1],
+          extra: _bottomNavigationBarOptions[index],
         );
       case 2:
         context.go(
           AppNavigationRoutes.cart,
-          extra: _bottomNavigationBarOptions[2],
+          extra: _bottomNavigationBarOptions[index],
         );
       case 3:
         context.go(
           AppNavigationRoutes.profile,
-          extra: _bottomNavigationBarOptions[3],
+          extra: _bottomNavigationBarOptions[index],
         );
     }
   }
@@ -84,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: AppColors.appBackground,
       bottomNavigationBar: bottomNavigationBarHandler(
-        index: _selectedTab(context),
+        index: selectedTab,
         labelList: _bottomNavigationBarOptions,
         onSelectTab: (index) => _onSelectTab(index, context),
       ),
