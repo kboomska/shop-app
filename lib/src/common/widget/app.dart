@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'package:shop_app_bloc/src/common/router/app_navigation_route_names.dart';
 import 'package:shop_app_bloc/src/common/theme/app_colors.dart';
 
 abstract interface class IAppNavigation {
-  Map<String, Widget Function(BuildContext)> get routes;
+  RouterConfig<Object> get router;
 }
 
 class App extends StatelessWidget {
@@ -16,7 +15,7 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Shop App',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -41,8 +40,9 @@ class App extends StatelessWidget {
         Locale('ru', 'RU'),
         Locale('en', 'EN'),
       ],
-      routes: navigation.routes,
-      initialRoute: AppNavigationRouteNames.home,
+      routerConfig: navigation.router,
+      // routeInformationParser: navigation.router.routeInformationParser,
+      // routerDelegate: navigation.router.routerDelegate,
       builder: (context, child) => MediaQuery(
         data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
         child: child ?? const SizedBox.shrink(),
