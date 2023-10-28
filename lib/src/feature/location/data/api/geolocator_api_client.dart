@@ -39,8 +39,8 @@ final class GeolocatorApiClientImpl implements IGeolocatorApiClient {
     try {
       position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.low,
-      ).timeout(const Duration(seconds: 15));
-    } catch (e) {
+      );
+    } catch (_) {
       throw LocationApiClientExceptionType.other;
     }
     return (position.latitude, position.longitude);
