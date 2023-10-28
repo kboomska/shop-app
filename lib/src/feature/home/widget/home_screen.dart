@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
+import 'package:shop_app_bloc/src/common/router/app_navigation_routes.dart';
 import 'package:shop_app_bloc/src/feature/location/cubit/location_cubit.dart';
 import 'package:shop_app_bloc/src/common/resources/resources.dart';
 import 'package:shop_app_bloc/src/common/theme/app_colors.dart';
@@ -12,19 +14,16 @@ abstract interface class IHomeNestedNavigation {
 }
 
 class HomeScreen extends StatefulWidget {
-  final IHomeNestedNavigation navigation;
+  final Widget child;
 
-  const HomeScreen({
-    required this.navigation,
-    super.key,
-  });
+  const HomeScreen({super.key, required this.child});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedTab = 0;
+  int selectedTab = 0;
 
   static const List<String> _bottomNavigationBarOptions = [
     'Главная',
@@ -44,36 +43,39 @@ class _HomeScreenState extends State<HomeScreen> {
     return '${locale.languageCode}_${locale.countryCode}';
   }
 
-  void _onSelectTab(int index) {
-    if (_selectedTab == index) return;
-    setState(() {
-      _selectedTab = index;
-    });
+  void _onSelectTab(int index, BuildContext context) {
+    selectedTab = index;
+
+    switch (index) {
+      case 0:
+        context.go(AppNavigationRoutes.categories);
+      case 1:
+        context.go(
+          AppNavigationRoutes.search,
+          extra: _bottomNavigationBarOptions[index],
+        );
+      case 2:
+        context.go(
+          AppNavigationRoutes.cart,
+          extra: _bottomNavigationBarOptions[index],
+        );
+      case 3:
+        context.go(
+          AppNavigationRoutes.profile,
+          extra: _bottomNavigationBarOptions[index],
+        );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: bottomNavigationBarHandler(
-        index: _selectedTab,
+        index: selectedTab,
         labelList: _bottomNavigationBarOptions,
-        onSelectTab: _onSelectTab,
+        onSelectTab: (index) => _onSelectTab(index, context),
       ),
-      body: IndexedStack(
-        index: _selectedTab,
-        children: [
-          widget.navigation.categoriesScreenNavigator(),
-          widget.navigation.dummyScreenNavigator(
-            _bottomNavigationBarOptions[1],
-          ),
-          widget.navigation.dummyScreenNavigator(
-            _bottomNavigationBarOptions[2],
-          ),
-          widget.navigation.dummyScreenNavigator(
-            _bottomNavigationBarOptions[3],
-          ),
-        ],
-      ),
+      body: widget.child,
     );
   }
 }
