@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:rest_client/rest_client.dart';
 
 import 'package:shop_app_bloc/src/feature/categories/data/api/categories_network_data_provider.dart';
 import 'package:shop_app_bloc/src/feature/categories/data/repository/categories_repository.dart';
@@ -61,6 +62,9 @@ final class _DIContainer {
         httpClient: _httpClient(),
       );
 
+  /// Create [RestClientImpl]
+  IRestClient _makeRestClient() => RestClientImpl();
+
   /// Create [GeolocatorApiClientImpl]
   IGeolocatorApiClient _makeGeolocatorApiClient() =>
       const GeolocatorApiClientImpl();
@@ -74,7 +78,7 @@ final class _DIContainer {
   /// Create [CategoriesNetworkDataProviderImpl]
   ICategoriesNetworkDataProvider _makeCategoriesNetworkDataProvider() =>
       CategoriesNetworkDataProviderImpl(
-        networkClient: _makeNetworkClient(),
+        client: _makeRestClient(),
       );
 
   /// Create [DishesNetworkDataProviderImpl]
