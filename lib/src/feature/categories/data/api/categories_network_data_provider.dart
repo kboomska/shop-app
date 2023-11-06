@@ -9,15 +9,15 @@ abstract interface class ICategoriesNetworkDataProvider {
 
 class CategoriesNetworkDataProviderImpl
     implements ICategoriesNetworkDataProvider {
-  final IRestClient _client;
+  final IRestClient _restClient;
 
   const CategoriesNetworkDataProviderImpl({
-    required IRestClient client,
-  }) : _client = client;
+    required IRestClient restClient,
+  }) : _restClient = restClient;
 
   @override
   Future<CategoriesResponse> getCategories() async {
-    final result = await _client.get(
+    final result = await _restClient.get(
       Configuration.host,
       Configuration.categoriesUrl,
     );

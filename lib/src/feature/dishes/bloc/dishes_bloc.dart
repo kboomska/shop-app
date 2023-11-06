@@ -3,9 +3,9 @@ import 'dart:async';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:rest_client/rest_client.dart';
 
 import 'package:shop_app_bloc/src/feature/dishes/data/repository/dishes_repository.dart';
-import 'package:shop_app_bloc/src/common/network/network_client_exception.dart';
 import 'package:shop_app_bloc/src/feature/dishes/bloc/dishes_event.dart';
 import 'package:shop_app_bloc/src/feature/dishes/bloc/dishes_state.dart';
 import 'package:shop_app_bloc/src/feature/dishes/model/dish_tag.dart';
@@ -63,11 +63,11 @@ class DishesBloc extends Bloc<DishesEvent, DishesState> {
     } on TimeoutException {
       error =
           'Превышено время ожидания ответа от сервера. Повторите попытку позднее';
-    } on NetworkClientException catch (e) {
-      switch (e.type) {
-        case NetworkClientExceptionType.network:
+    } on NetworkException catch (e) {
+      switch (e) {
+        case InternalServerException _:
           error = 'Сервер не доступен. Проверьте подключение к сети интернет';
-        case NetworkClientExceptionType.other:
+        case RestClientException _:
           error = 'Произошла ошибка соединения. Попробуйте еще раз';
       }
     } catch (_) {

@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as p;
 
 import 'package:rest_client/src/exception/network_exception.dart';
+import 'package:rest_client/src/http_client.dart';
 
 abstract interface class IRestClient {
   Future<Map<String, Object?>> get(
@@ -16,10 +17,10 @@ abstract interface class IRestClient {
 
 class RestClientImpl implements IRestClient {
   RestClientImpl({
-    http.Client? client,
-  }) : _client = client ?? http.Client();
+    required IHttpClient client,
+  }) : _client = client;
 
-  final http.Client _client;
+  final IHttpClient _client;
 
   @override
   Future<Map<String, Object?>> get(

@@ -17,9 +17,7 @@ import 'package:shop_app_bloc/src/feature/dishes/widget/dishes_screen.dart';
 import 'package:shop_app_bloc/src/feature/dishes/bloc/dishes_bloc.dart';
 import 'package:shop_app_bloc/src/feature/home/widget/home_screen.dart';
 import 'package:shop_app_bloc/src/feature/date/widget/date_scope.dart';
-import 'package:shop_app_bloc/src/common/network/network_client.dart';
 import 'package:shop_app_bloc/src/common/router/app_navigation.dart';
-import 'package:shop_app_bloc/src/common/network/http_client.dart';
 import 'package:shop_app_bloc/src/common/widget/app.dart';
 import 'package:shop_app_bloc/main.dart';
 
@@ -57,13 +55,8 @@ final class _DIContainer {
   /// Create [HttpClientImpl]
   IHttpClient _httpClient() => const HttpClientImpl();
 
-  /// Create [NetworkClientImpl]
-  INetworkClient _makeNetworkClient() => NetworkClientImpl(
-        httpClient: _httpClient(),
-      );
-
   /// Create [RestClientImpl]
-  IRestClient _makeRestClient() => RestClientImpl();
+  IRestClient _makeRestClient() => RestClientImpl(client: _httpClient());
 
   /// Create [GeolocatorApiClientImpl]
   IGeolocatorApiClient _makeGeolocatorApiClient() =>
@@ -78,13 +71,13 @@ final class _DIContainer {
   /// Create [CategoriesNetworkDataProviderImpl]
   ICategoriesNetworkDataProvider _makeCategoriesNetworkDataProvider() =>
       CategoriesNetworkDataProviderImpl(
-        client: _makeRestClient(),
+        restClient: _makeRestClient(),
       );
 
   /// Create [DishesNetworkDataProviderImpl]
   IDishesNetworkDataProvider _makeDishesNetworkDataProvider() =>
       DishesNetworkDataProviderImpl(
-        networkClient: _makeNetworkClient(),
+        restClient: _makeRestClient(),
       );
 
   /// Repositories

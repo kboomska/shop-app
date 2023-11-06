@@ -1,32 +1,26 @@
+import 'package:rest_client/rest_client.dart';
+
 import 'package:shop_app_bloc/src/feature/dishes/model/dishes_response.dart';
 import 'package:shop_app_bloc/src/common/constant/configuration.dart';
-import 'package:shop_app_bloc/src/common/network/network_client.dart';
 
 abstract interface class IDishesNetworkDataProvider {
   Future<DishesResponse> getDishes();
 }
 
 class DishesNetworkDataProviderImpl implements IDishesNetworkDataProvider {
-  final INetworkClient _networkClient;
+  final IRestClient _restClient;
 
   const DishesNetworkDataProviderImpl({
-    required INetworkClient networkClient,
-  }) : _networkClient = networkClient;
+    required IRestClient restClient,
+  }) : _restClient = restClient;
 
   @override
   Future<DishesResponse> getDishes() async {
-    DishesResponse parser(dynamic json) {
-      final jsonMap = json as Map<String, dynamic>;
-      final jsonResponse = DishesResponse.fromJson(jsonMap);
-      return jsonResponse;
-    }
-
-    final result = _networkClient.get(
+    final result = await _restClient.get(
       Configuration.host,
       Configuration.dishesUrl,
-      parser,
     );
 
-    return result;
+    return DishesResponse.fromJson(result);
   }
 }
